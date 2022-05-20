@@ -1,0 +1,80 @@
+spec_version: 2-preview
+description: All in one deployment of our promotions manager
+
+
+inputs:
+  PORT:
+    type: number
+    display-style: normal
+    default: 3000
+  API_PORT:
+    type: number
+    display-style: normal
+    default: 3001
+  AWS_INSTANCE_TYPE:
+    type: string
+    display-style: normal
+    default: "m5.large"
+  RELEASE_NUMBER:
+    type: string
+    display-style: normal
+    default: none
+  API_BUILD_NUMBER:
+    type: string
+    display-style: normal
+    default: none
+
+
+grains:
+  mySqlDB:
+    kind: terraform
+    spec:
+      source:
+        path: https://github.com/QualiSystemsLab/terraform-modules.git//rds
+      host:
+        cloud-account: aws-workshop
+        # compute-service: eks-torque-demo-oleksandrr1
+      inputs:
+        - sandbox_id: '{{ sandboxid | downcase }}'
+        - instance_class: "db.t3.micro"
+        - allocated_storage: 20
+        - engine_version: "5.7.25"
+        - engine: mysql
+        - aws_region: us-west-2
+        - db_name: '{{.inputs.db_name}}'
+        - username: '{{.inputs.username}}'
+        - password: '{{.inputs.password}}'
+      outputs:
+        - db_instance_address
+        - db_instance_name
+        - db_instance_password
+        - db_instance_username
+
+
+  petclinic:
+    kind: helm
+    depends-on: mySqlDB
+    spec:
+      source:
+        path: 
+      host:
+        cloud-account: aws-workshop
+        # compute-service: eks-torque-demo-oleksandrr1
+      inputs:
+        # - extraEnv.DATABASE_ENGINE: mysql
+        # - extraEnv.DATABASE_HOST: '{{ .grains.mySqlDB.outputs.db_instance_address }}'
+        # - extraEnv.DATABASE_NAME: '{{ .grains.mySqlDB.outputs.db_instance_username }}'
+        # - extraEnv.DATABASE_USERNAME: '{{ .grains.mySqlDB.outputs.db_instance_username }}'
+        # - extraEnv.DATABASE_PASSWORD: '{{ .grains.mySqlDB.outputs.db_instance_password }}'
+        - .extraEnv.DATABASE_ENGINE: mysql
+        - .extraEnv.MYSQL_URL: 'jdbc:mysql://{{ .grains.mySqlDB.outputs.db_instance_address }}/{{ .grains.mySqlDB.outputs.db_instance_username }}'
+        - .extraEnv.MYSQL_USER: '{{ .grains.mySqlDB.outputs.db_instance_username }}'
+        - .extraEnv.MYSQL_PASS: '{{ .grains.mySqlDB.outputs.db_instance_password }}'
+
+outputs:
+  MYSQL_URL:
+    value: 'jdbc:mysql://{{ .grains.mySqlDB.outputs.db_instance_address }}/{{ .grains.mySqlDB.outputs.db_instance_username }}'
+  MYSQL_PASS:
+    value: '{{ .grains.mySqlDB.outputs.db_instance_password }}'
+  MYSQL_USER:
+    value: '{{ .grains.mySqlDB.outputs.db_instance_username }}'
