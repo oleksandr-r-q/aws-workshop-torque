@@ -42,7 +42,7 @@ inputs:
     default: test
 
 grains:
-  vpc:
+  vpc_test:
     kind: terraform
     spec:
       source:
@@ -63,7 +63,7 @@ grains:
         - instance_profile
 outputs:
   public_subnet:
-    value: '{{ .grains.vpc.outputs.public_subnet }}'
+    value: '{{ .grains.vpc_test.outputs.public_subnet }}'
   # promotions-manager-all:
   #   kind: terraform
   #   depends-on: vpc
