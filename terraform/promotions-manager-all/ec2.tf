@@ -68,6 +68,7 @@ data "template_cloudinit_config" "promotions-manager" {
       {
         S3  = var.aws_s3_bucket,
         ARTIFACTS_PATH = "/tmp/${var.artifacts_path_promotions-manager-api}"
+        DATABASE_HOST  = "127.0.0.1"
       }
     )
   }

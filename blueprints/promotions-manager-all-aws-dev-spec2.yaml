@@ -15,22 +15,22 @@ inputs:
     type: string
     display-style: normal
     default: "t3a.micro"
-  RELEASE_NUMBER:
-    type: string
-    display-style: normal
-    default: none
-  API_BUILD_NUMBER:
-    type: string
-    display-style: normal
-    default: none
-  DB_USERNAME:
-    type: string
-    default: adminuser
-  DB_PASSWORD: 
-    type: string
-    # sensitive: true
-    description: please set the master database password
-    default: Welcome1234567+
+  # RELEASE_NUMBER:
+  #   type: string
+  #   display-style: normal
+  #   default: none
+  # API_BUILD_NUMBER:
+  #   type: string
+  #   display-style: normal
+  #   default: none
+  # DB_USERNAME:
+  #   type: string
+  #   default: adminuser
+  # DB_PASSWORD: 
+  #   type: string
+  #   # sensitive: true
+  #   description: please set the master database password
+  #   default: Welcome1234567+
   AWS_REGION:
     type: string
     default: us-west-2
