@@ -46,7 +46,7 @@ grains:
     kind: terraform
     spec:
       source:
-        path: https://github.com/oleksandr-r-q/aws-workshop-torque.git//terraform/vpc
+        path: github.com/oleksandr-r-q/aws-workshop-torque/terraform/vpc
       host:
         cloud-account: AWS
         compute-service: eks-torque-demo-oleksandrr1
