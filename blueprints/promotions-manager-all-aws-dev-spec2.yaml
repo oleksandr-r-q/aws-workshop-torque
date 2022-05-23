@@ -61,7 +61,9 @@ grains:
         - private_subnets
         - aws_security_group_id
         - instance_profile
-
+outputs:
+  public_subnet:
+    value: '{{ .grains.vpc.outputs.public_subnet }}'
   # promotions-manager-all:
   #   kind: terraform
   #   depends-on: vpc
