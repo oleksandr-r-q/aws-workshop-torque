@@ -14,7 +14,7 @@ inputs:
   AWS_INSTANCE_TYPE:
     type: string
     display-style: normal
-    default: "m5.large"
+    default: "t3a.micro"
   RELEASE_NUMBER:
     type: string
     display-style: normal
