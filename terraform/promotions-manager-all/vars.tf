@@ -51,11 +51,11 @@ variable "instance_profile" {
 }
 
 variable "public_subnet" {
-  default = "subnet-0eb28836bc07d12f5"
+  default = "subnet-0e6cce5819d3c7ed7"
 }
 
 variable "aws_security_group_id" {
-  default = "sg-06c5055e14615efd2"
+  default = "sg-04510ffc4e38e54bc"
 }
 
 variable "aws_s3_bucket" {
