@@ -33,12 +33,15 @@ inputs:
   #   default: Welcome1234567+
   AWS_REGION:
     type: string
+    display-style: normal
     default: us-west-2
   aws_s3_bucket:
     type: string
+    display-style: normal
     default: artifact-repo-promotionapp-oleksandr
   Environment:
     type: string
+    display-style: normal
     default: test
 
 grains:
