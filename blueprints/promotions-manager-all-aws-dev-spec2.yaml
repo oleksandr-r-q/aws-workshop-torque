@@ -15,14 +15,14 @@ inputs:
     type: string
     display-style: normal
     default: "t3a.micro"
-  # RELEASE_NUMBER:
-  #   type: string
-  #   display-style: normal
-  #   default: none
-  # API_BUILD_NUMBER:
-  #   type: string
-  #   display-style: normal
-  #   default: none
+  RELEASE_NUMBER:
+    type: string
+    display-style: normal
+    default: none
+  API_BUILD_NUMBER:
+    type: string
+    display-style: normal
+    default: none
   # DB_USERNAME:
   #   type: string
   #   default: adminuser
@@ -82,6 +82,7 @@ grains:
         - aws_s3_bucket: '{{.inputs.aws_s3_bucket}}'
         - API_PORT: '{{.inputs.API_PORT}}'
         - PORT: '{{.inputs.PORT}}'
+        - RELEASE_NUMBER: '{{.inputs.RELEASE_NUMBER}}'
   # promotions-manager-api:
   #   kind: terraform
   #   spec:
