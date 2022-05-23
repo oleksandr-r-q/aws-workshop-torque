@@ -70,7 +70,7 @@ data "template_cloudinit_config" "promotions-manager" {
         ARTIFACTS_PATH = "/tmp/${var.artifacts_path_promotions-manager-api}",
         DATABASE_HOST  = "127.0.0.1",
         RELEASE_NUMBER = var.RELEASE_NUMBER,
-        API_BUILD_NUMBER = var.API_BUILD_NUMBERб
+        API_BUILD_NUMBER = var.API_BUILD_NUMBER,
         API_PORT = var.API_PORT,
         PORT = var.PORT
       }
@@ -83,7 +83,7 @@ data "template_cloudinit_config" "promotions-manager" {
       "${path.module}/templates/promotions-manager-ui.sh",
       {
         S3  = var.aws_s3_bucket,
-        ARTIFACTS_PATH = "/tmp/${var.artifacts_path_promotions-manager-ui}"б
+        ARTIFACTS_PATH = "/tmp/${var.artifacts_path_promotions-manager-ui}",
         API_PORT = var.API_PORT,
         PORT = var.PORT
       }

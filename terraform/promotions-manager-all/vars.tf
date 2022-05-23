@@ -47,15 +47,15 @@ variable "PORT" {
 }
 
 variable "instance_profile" {
-  default = ""
+  default = "promotions-manager-test12"
 }
 
 variable "public_subnet" {
-  default = ""
+  default = "subnet-0eb28836bc07d12f5"
 }
 
 variable "aws_security_group_id" {
-  default = ""
+  default = "sg-06c5055e14615efd2"
 }
 
 variable "aws_s3_bucket" {

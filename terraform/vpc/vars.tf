@@ -4,7 +4,7 @@ variable AWS_REGION {
 }
 
 variable SANDBOX_ID {
-  default = "test"
+  default = "test12"
 }
 
 variable "env" {
