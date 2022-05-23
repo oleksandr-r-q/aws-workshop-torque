@@ -28,7 +28,7 @@ inputs:
     default: adminuser
   DB_PASSWORD: 
     type: string
-    sensitive: true
+    # sensitive: true
     description: please set the master database password
     default: Welcome1234567+
   AWS_REGION:
