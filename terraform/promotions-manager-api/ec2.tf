@@ -17,7 +17,7 @@ data "aws_ami" "ubuntu" {
 
 resource "aws_instance" "promotions-manager" {
   ami        = data.aws_ami.ubuntu.id
-  private_ip = "10.0.1.100"
+  private_ip = "10.0.1.101"
   instance_type = var.instance_type
 
   iam_instance_profile = var.instance_profile != "" ? var.instance_profile : "promotions-manager-${var.env}"
@@ -30,7 +30,7 @@ resource "aws_instance" "promotions-manager" {
 
   user_data = data.template_cloudinit_config.promotions-manager.rendered
   tags = {
-    name = "promotions-manager-${var.SANDBOX_ID}"
+    name = "promotions-manager-api-${var.SANDBOX_ID}"
   }
 }
 
@@ -50,17 +50,6 @@ data "template_cloudinit_config" "promotions-manager" {
     )
   }
 
-  # mongodb
-  part {
-    content = templatefile(
-      "${path.module}/templates/mongodb.sh",
-      {
-        S3  = var.aws_s3_bucket,
-        ARTIFACTS_PATH = "/tmp/${var.artifacts_path_mongodb}"
-      }
-    )
-  }
-
   # promotions-manager-api
   part {
     content = templatefile(
@@ -76,21 +65,7 @@ data "template_cloudinit_config" "promotions-manager" {
       }
     )
   }
-
-    # promotions-manager-ui
-  part {
-    content = templatefile(
-      "${path.module}/templates/promotions-manager-ui.sh",
-      {
-        S3  = var.aws_s3_bucket,
-        ARTIFACTS_PATH = "/tmp/${var.artifacts_path_promotions-manager-ui}"б
-        API_PORT = var.API_PORT,
-        PORT = var.PORT
-      }
-    )
-  }
 }
-
 # artifacts:
 #   - promotions-manager-ui: artifacts/latest/promotions-manager-ui.master.tar.gz
 #   - promotions-manager-api: artifacts/latest/promotions-manager-api.master.tar.gz
