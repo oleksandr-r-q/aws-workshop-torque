@@ -79,6 +79,7 @@ grains:
         - public_subnet: '{{ .grains.vpc.outputs.public_subnet }}'
         - aws_security_group_id: '{{ .grains.vpc.outputs.aws_security_group_id }}'
         - env: '{{.inputs.Environment}}'
+        - aws_s3_bucket: '{{.inputs.aws_s3_bucket}}'
   # promotions-manager-api:
   #   kind: terraform
   #   spec:
