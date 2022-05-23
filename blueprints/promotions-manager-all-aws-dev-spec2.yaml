@@ -62,24 +62,24 @@ grains:
         - aws_security_group_id
         - instance_profile
 
-  promotions-manager-all:
-    kind: terraform
-    depends-on: vpc
-    spec:
-      source:
-        path: https://github.com/oleksandr-r-q/aws-workshop-torque.git//terraform/promotions-manager-all
-      host:
-        cloud-account: AWS
-        compute-service: eks-torque-demo-oleksandrr1
-      inputs:
-        - SANDBOX_ID: '{{ sandboxid | downcase }}'
-        - instance_type: '{{.inputs.AWS_INSTANCE_TYPE}}'
-        - AWS_REGION: '{{.inputs.AWS_REGION}}'
-        - instance_profile: '{{ .grains.vpc.outputs.instance_profile }}'
-        - public_subnet: '{{ .grains.vpc.outputs.public_subnet }}'
-        - aws_security_group_id: '{{ .grains.vpc.outputs.aws_security_group_id }}'
-        - env: '{{.inputs.Environment}}'
-        - aws_s3_bucket: '{{.inputs.aws_s3_bucket}}'
+  # promotions-manager-all:
+  #   kind: terraform
+  #   depends-on: vpc
+  #   spec:
+  #     source:
+  #       path: https://github.com/oleksandr-r-q/aws-workshop-torque.git//terraform/promotions-manager-all
+  #     host:
+  #       cloud-account: AWS
+  #       compute-service: eks-torque-demo-oleksandrr1
+  #     inputs:
+  #       - SANDBOX_ID: '{{ sandboxid | downcase }}'
+  #       - instance_type: '{{.inputs.AWS_INSTANCE_TYPE}}'
+  #       - AWS_REGION: '{{.inputs.AWS_REGION}}'
+  #       - instance_profile: '{{ .grains.vpc.outputs.instance_profile }}'
+  #       - public_subnet: '{{ .grains.vpc.outputs.public_subnet }}'
+  #       - aws_security_group_id: '{{ .grains.vpc.outputs.aws_security_group_id }}'
+  #       - env: '{{.inputs.Environment}}'
+  #       - aws_s3_bucket: '{{.inputs.aws_s3_bucket}}'
   # promotions-manager-api:
   #   kind: terraform
   #   spec:
