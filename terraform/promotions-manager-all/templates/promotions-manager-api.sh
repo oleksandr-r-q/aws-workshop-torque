@@ -33,8 +33,10 @@ sudo apt install npm -y
 
 echo '==> Extract api artifact to /var/promotions-manager-api' >> ${ARTIFACTS_PATH}/api.log
 mkdir -p ${ARTIFACTS_PATH}/drop
+echo "tar -xvf ${ARTIFACTS_PATH}/promotions-manager-api.*.tar.gz -C ${ARTIFACTS_PATH}/drop/" >> ${ARTIFACTS_PATH}/api.log
 tar -xvf ${ARTIFACTS_PATH}/promotions-manager-api.*.tar.gz -C ${ARTIFACTS_PATH}/drop/ >> ${ARTIFACTS_PATH}/api.log 2>&1
 mkdir /var/promotions-manager-api/
+echo "tar -xvf ${ARTIFACTS_PATH}/drop/drop/promotions-manager-api.*.tar.gz -C /var/promotions-manager-api" >> ${ARTIFACTS_PATH}/api.log
 tar -xvf ${ARTIFACTS_PATH}/drop/drop/promotions-manager-api.*.tar.gz -C /var/promotions-manager-api >> ${ARTIFACTS_PATH}/api.log 2>&1
 
 echo '==> Set the DATABASE_HOST env var to be globally available' >> ${ARTIFACTS_PATH}/api.log
