@@ -11,12 +11,13 @@ echo '==> Instal curl' >> ${ARTIFACTS_PATH}/api.log
 apt-get install curl -y
 
 echo '==> Installing node 10' >> ${ARTIFACTS_PATH}/api.log
-sudo add-apt-repository -y -r ppa:chris-lea/node.js
-sudo rm -f /etc/apt/sources.list.d/chris-lea-node_js-*.list
-sudo rm -f /etc/apt/sources.list.d/chris-lea-node_js-*.list.save
+sudo add-apt-repository -y -r ppa:chris-lea/node.js | sudo tee >> ${ARTIFACTS_PATH}/api.log
+sudo rm -f /etc/apt/sources.list.d/chris-lea-node_js-*.list | sudo tee >> ${ARTIFACTS_PATH}/api.log
+sudo rm -f /etc/apt/sources.list.d/chris-lea-node_js-*.list.save | sudo tee >> ${ARTIFACTS_PATH}/api.log
+echo 'done add-apt-repository' >> ${ARTIFACTS_PATH}/api.log
 KEYRING="/usr/share/keyrings/nodesource.gpg"
 wget --quiet -O - https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | sudo tee "$KEYRING" >/dev/null
-gpg --no-default-keyring --keyring "$KEYRING" --list-keys
+gpg --no-default-keyring --keyring "$KEYRING" --list-keys | sudo tee >> ${ARTIFACTS_PATH}/api.log
 VERSION=node_10.x
 DISTRO="$(lsb_release -s -c)"
 echo "deb [signed-by=$KEYRING] http://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee /etc/apt/sources.list.d/nodesource.list
@@ -58,6 +59,6 @@ chattr +i /root/.pm2/dump.pm2
 sudo su -c "env PATH=$PATH:/home/unitech/.nvm/versions/node/v4.3/bin pm2 startup systemd -u root --hp /root" >> ${ARTIFACTS_PATH}/api.log
 
 
-tar -xvf /tmp/artifacts/latest/promotions-manager-api.*.tar.gz -C /tmp/artifacts/latest/drop/
+# tar -xvf /tmp/artifacts/latest/promotions-manager-api.*.tar.gz -C /tmp/artifacts/latest/drop/
 
-tar -xvf /tmp/artifacts/latest/drop/drop/promotions-manager-api.*.tar.gz -C /var/promotions-manager-api
+# tar -xvf /tmp/artifacts/latest/drop/drop/promotions-manager-api.*.tar.gz -C /var/promotions-manager-api
