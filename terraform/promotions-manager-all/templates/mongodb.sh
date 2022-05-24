@@ -52,3 +52,5 @@ done
 echo 'Run mongodb service' >> ${ARTIFACTS_PATH}/mongo.log
 # Start the MongoDB Service
 service mongod start
+
+echo "mongod config done" >> ${ARTIFACTS_PATH}/mongo.log

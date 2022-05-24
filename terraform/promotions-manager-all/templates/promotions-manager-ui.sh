@@ -34,7 +34,7 @@ server {
 	server_name _;
 	index index.html index.htm;
 	location /api {		
-		proxy_pass http://localhost/api;
+		proxy_pass http://localhost:${API_PORT}/api;
 		proxy_http_version 1.1;
 		proxy_set_header Upgrade \$http_upgrade;
 		proxy_set_header Connection 'upgrade';
@@ -51,3 +51,5 @@ EOF
 echo 'Start nginx service' >> ${ARTIFACTS_PATH}/ui.log
 service nginx stop >> ${ARTIFACTS_PATH}/ui.log
 service nginx start >> ${ARTIFACTS_PATH}/ui.log
+
+echo "ui config done" >> ${ARTIFACTS_PATH}/ui.log
