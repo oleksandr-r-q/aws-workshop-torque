@@ -1,5 +1,6 @@
 #!/bin/bash -x
-ARTIFACTS_PATH="/tmp/artifacts"
+
+touch ${ARTIFACTS_PATH}/ui.log
 echo '=============== Staring init script for Promotions Manager UI ==============='
 
 # save all env for debugging
@@ -9,16 +10,16 @@ echo '==> Installing Node.js and NPM'
 apt-get update
 apt install curl -y
 curl -sL https://deb.nodesource.com/setup_10.x | bash -
-apt install nodejs
+apt install nodejs 2>&1 >> ${ARTIFACTS_PATH}/ui.log
 
 echo '==> Install nginx'
 apt-get install nginx -y
 
-echo '==> Extract ui artifact to /var/www/promotions-manager/'
+echo '==> Extract ui artifact to /var/www/promotions-manager/' 2>&1 >> ${ARTIFACTS_PATH}/ui.log
 mkdir -p ${ARTIFACTS_PATH}/drop
-tar -xvf ${ARTIFACTS_PATH}/promotions-manager-ui.*.tar.gz -C ${ARTIFACTS_PATH}/drop/
+tar -xvf ${ARTIFACTS_PATH}/promotions-manager-ui.*.tar.gz -C ${ARTIFACTS_PATH}/drop/ 2>&1 >> ${ARTIFACTS_PATH}/ui.log
 mkdir /var/www/promotions-manager/
-tar -xvf ${ARTIFACTS_PATH}/drop/drop/promotions-manager-ui.*.tar.gz -C /var/www/promotions-manager/
+tar -xvf ${ARTIFACTS_PATH}/drop/drop/promotions-manager-ui.*.tar.gz -C /var/www/promotions-manager/ 2>&1 >> ${ARTIFACTS_PATH}/ui.log
 
 echo '==> Configure nginx'
 cd /etc/nginx/sites-available/
@@ -46,6 +47,6 @@ server {
 }
 EOF
 
-echo 'Start nginx service'
-service nginx stop
-service nginx start
+echo 'Start nginx service' 2>&1 >> ${ARTIFACTS_PATH}/ui.log
+service nginx stop 2>&1 >> ${ARTIFACTS_PATH}/ui.log
+service nginx start 2>&1 >> ${ARTIFACTS_PATH}/ui.log

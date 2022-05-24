@@ -1,6 +1,6 @@
 #!/bin/bash -x
-ARTIFACTS_PATH="/tmp/artifacts"
-echo 'Installing mongodb 4.0'
+touch ${ARTIFACTS_PATH}/mongo.log
+echo 'Installing mongodb 4.0' 2>&1 >> ${ARTIFACTS_PATH}/mongo.log
 
 # save all env for debugging
 printenv > /var/log/colony-vars-"$(basename "$BASH_SOURCE" .sh)".txt
@@ -15,7 +15,7 @@ echo ' Update the Ubuntu Packages'
 apt-get update 
 
 echo 'Install MongoDB'
-apt-get install -y mongodb-org
+apt-get install -y mongodb-org 2>&1 >> ${ARTIFACTS_PATH}/mongo.log
 # prevent auto updates
 echo "mongodb-org hold" | sudo dpkg --set-selections
 echo "mongodb-org-server hold" | sudo dpkg --set-selections
@@ -27,14 +27,14 @@ echo 'Change mongoDB Listening IP Address from local 127.0.0.1 to All IPs 0.0.0.
 sed -i 's/127\.0\.0\.1/0\.0\.0\.0/g' /etc/mongod.conf
 
 echo 'Start the mongo service'
-service mongod start
+service mongod start 2>&1 >> ${ARTIFACTS_PATH}/mongo.log
 
 echo 'Enable automatically starting MongoDB when the system starts.'
-sudo systemctl enable mongod
+sudo systemctl enable mongod 2>&1 >> ${ARTIFACTS_PATH}/mongo.log
 
 echo 'Extracting user data db artifact'
 mkdir -p ${ARTIFACTS_PATH}/drop
-tar -xvf ${ARTIFACTS_PATH}/*.* -C ${ARTIFACTS_PATH}/drop/
+tar -xvf ${ARTIFACTS_PATH}/*.* -C ${ARTIFACTS_PATH}/drop/ 2>&1 >> ${ARTIFACTS_PATH}/mongo.log
 
 echo 'Waiting for db to be ready'
 sleep 30
@@ -48,6 +48,6 @@ for f in ./*.json; do
 done
 
 
-echo 'Run mongodb service'
+echo 'Run mongodb service' 2>&1 >> ${ARTIFACTS_PATH}/mongo.log
 # Start the MongoDB Service
-service mongod start
+service mongod start 2>&1 >> ${ARTIFACTS_PATH}/mongo.log
