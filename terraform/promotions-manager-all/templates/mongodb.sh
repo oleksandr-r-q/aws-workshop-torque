@@ -1,21 +1,21 @@
-#!/bin/bash -x
+#!/bin/bash -xe
 touch ${ARTIFACTS_PATH}/mongo.log
 echo 'Installing mongodb 4.0' >> ${ARTIFACTS_PATH}/mongo.log
 
 # save all env for debugging
 printenv > /var/log/colony-vars-"$(basename "$BASH_SOURCE" .sh)".txt
 
-echo 'Import the Public Key used by the Ubuntu Package Manager'
+echo 'Import the Public Key used by the Ubuntu Package Manager' >> ${ARTIFACTS_PATH}/mongo.log
 apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
 
 echo 'Create a file list for mongoDB to fetch the current repository'
 echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list
 
-echo ' Update the Ubuntu Packages'
+echo ' Update the Ubuntu Packages' >> ${ARTIFACTS_PATH}/mongo.log
 apt-get update 
 
-echo 'Install MongoDB'
-apt-get install -y mongodb-org >> ${ARTIFACTS_PATH}/mongo.log
+echo 'Install MongoDB' >> ${ARTIFACTS_PATH}/mongo.log
+apt-get install -y mongodb-org 
 # prevent auto updates
 echo "mongodb-org hold" | sudo dpkg --set-selections
 echo "mongodb-org-server hold" | sudo dpkg --set-selections
@@ -50,4 +50,4 @@ done
 
 echo 'Run mongodb service' >> ${ARTIFACTS_PATH}/mongo.log
 # Start the MongoDB Service
-service mongod start >> ${ARTIFACTS_PATH}/mongo.log
+service mongod start

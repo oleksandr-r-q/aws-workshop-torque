@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash -xe
 echo '=============== Staring init script for Promotions Manager API ==============='
 touch ${ARTIFACTS_PATH}/api.log
 # save all env for debugging
@@ -8,9 +8,9 @@ echo '==> apt-get update' >> ${ARTIFACTS_PATH}/api.log
 apt-get update -y
 
 echo '==> Instal curl' >> ${ARTIFACTS_PATH}/api.log
-apt-get install curl -y >> ${ARTIFACTS_PATH}/api.log
+apt-get install curl -y
 
-echo '==> Installing node 10'
+echo '==> Installing node 10' >> ${ARTIFACTS_PATH}/api.log
 sudo add-apt-repository -y -r ppa:chris-lea/node.js
 sudo rm -f /etc/apt/sources.list.d/chris-lea-node_js-*.list
 sudo rm -f /etc/apt/sources.list.d/chris-lea-node_js-*.list.save
@@ -22,9 +22,9 @@ DISTRO="$(lsb_release -s -c)"
 echo "deb [signed-by=$KEYRING] http://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee /etc/apt/sources.list.d/nodesource.list
 echo "deb-src [signed-by=$KEYRING] http://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
 sudo apt-get update -y
-sudo apt-get install nodejs -y --allow-unauthenticated >> ${ARTIFACTS_PATH}/api.log
+sudo apt-get install nodejs -y --allow-unauthenticated
 
-echo '==> Installing npm'
+echo '==> Installing npm' >> ${ARTIFACTS_PATH}/api.log
 sudo apt install libssl1.0-dev -y
 sudo apt install nodejs-dev -y
 sudo apt install node-gyp -y
@@ -37,7 +37,7 @@ tar -xvf ${ARTIFACTS_PATH}/promotions-manager-api.*.tar.gz -C ${ARTIFACTS_PATH}/
 mkdir /var/promotions-manager-api/
 tar -xvf ${ARTIFACTS_PATH}/drop/drop/promotions-manager-api.*.tar.gz -C /var/promotions-manager-api >> ${ARTIFACTS_PATH}/api.log
 
-echo '==> Set the DATABASE_HOST env var to be globally available'
+echo '==> Set the DATABASE_HOST env var to be globally available' >> ${ARTIFACTS_PATH}/api.log
 DATABASE_HOST=${DATABASE_HOST}.$DOMAIN_NAME
 echo 'DATABASE_HOST='${DATABASE_HOST} >> /etc/environment
 echo 'RELEASE_NUMBER='${RELEASE_NUMBER} >> /etc/environment
