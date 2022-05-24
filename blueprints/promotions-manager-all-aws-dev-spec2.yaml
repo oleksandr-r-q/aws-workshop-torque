@@ -86,6 +86,11 @@ grains:
         - API_PORT: '{{.inputs.API_PORT}}'
         - PORT: '{{.inputs.PORT}}'
         - RELEASE_NUMBER: '{{.inputs.RELEASE_NUMBER}}'
+      outputs:
+        - public_dns
+        - public_ip
+
+
   # promotions-manager-api:
   #   kind: terraform
   #   spec:
@@ -110,4 +115,4 @@ grains:
 
 outputs:
   public_subnet:
-    value: '{{ .grains.vpc_test.outputs.public_subnet }}'
+    value: 'http://{{ .grains.promotions-manager-all.outputs.public_dns }}:3000'
