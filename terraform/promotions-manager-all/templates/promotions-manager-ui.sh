@@ -34,7 +34,7 @@ server {
 	server_name _;
 	index index.html index.htm;
 	location /api {		
-		proxy_pass http://localhost:${API_PORT}/api;
+		proxy_pass http://${API_HOST}:${API_PORT}/api;
 		proxy_http_version 1.1;
 		proxy_set_header Upgrade \$http_upgrade;
 		proxy_set_header Connection 'upgrade';

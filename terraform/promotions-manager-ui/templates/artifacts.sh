@@ -1,5 +1,6 @@
 #!/bin/bash -x
-
+apt update
+apt install -y awscli
 
   
 # artifacts:

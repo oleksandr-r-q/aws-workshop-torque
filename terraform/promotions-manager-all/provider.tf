@@ -1,10 +1,10 @@
 provider "aws" {
-  region     = "${var.AWS_REGION}"
+  region = var.AWS_REGION
   default_tags {
     tags = {
-        Terraform = "true"
-        Environment = var.env,
-        sandbox_id = "${var.SANDBOX_ID}"
+      Terraform   = "true"
+      Environment = var.env,
+      sandbox_id  = "${var.SANDBOX_ID}"
     }
   }
 }

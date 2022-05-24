@@ -1,4 +1,4 @@
-variable AWS_REGION {
+variable "AWS_REGION" {
   type    = string
   default = "us-west-2"
 }
@@ -22,7 +22,7 @@ variable "ssh_port" {
   default = "22"
 }
 
-variable SANDBOX_ID {
+variable "SANDBOX_ID" {
   default = "test"
 }
 
@@ -32,30 +32,43 @@ variable "env" {
 
 
 variable "cidr_blocks" {
-  type = list(any)
+  type    = list(any)
   default = ["0.0.0.0/0"]
 }
 
 variable "API_PORT" {
-  type = number
+  type    = number
   default = 3001
 }
 
 variable "PORT" {
-  type = number
+  type    = number
   default = 3000
 }
 
+variable "API_HOST" {
+  default = "localhost"
+}
+
+variable "private_ip" {
+  default = "10.0.101.100"
+}
+
+variable "DATABASE_HOST" {
+  default = "127.0.0.1"
+}
+
+
 variable "instance_profile" {
-  default = ""
+  default = "promotions-manager-test12"
 }
 
 variable "public_subnet" {
-  default = ""
+  default = "subnet-0e6cce5819d3c7ed7"
 }
 
 variable "aws_security_group_id" {
-  default = ""
+  default = "sg-04510ffc4e38e54bc"
 }
 
 variable "aws_s3_bucket" {

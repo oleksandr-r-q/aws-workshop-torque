@@ -23,14 +23,10 @@ inputs:
     type: string
     display-style: normal
     default: none
-  # DB_USERNAME:
-  #   type: string
-  #   default: adminuser
-  # DB_PASSWORD: 
-  #   type: string
-  #   # sensitive: true
-  #   description: please set the master database password
-  #   default: Welcome1234567+
+  DATABASE_HOST:
+    type: string
+    display-style: normal
+    default: 127.0.0.1
   AWS_REGION:
     type: string
     display-style: normal
@@ -86,32 +82,14 @@ grains:
         - API_PORT: '{{.inputs.API_PORT}}'
         - PORT: '{{.inputs.PORT}}'
         - RELEASE_NUMBER: '{{.inputs.RELEASE_NUMBER}}'
+        - API_BUILD_NUMBER: '{{.inputs.API_BUILD_NUMBER}}'
+        - DATABASE_HOST: '{{.inputs.DATABASE_HOST}}'
       outputs:
         - public_dns
         - public_ip
+        - private_ip
+        - private_dns
 
-
-  # promotions-manager-api:
-  #   kind: terraform
-  #   spec:
-  #     source:
-  #       path: https://github.com/oleksandr-r-q/aws-workshop-torque.git//terraform/vpc
-  #     host:
-  #       cloud-account: AWS
-  #       compute-service: eks-torque-demo-oleksandrr1
-  #     inputs:
-  #       - SANDBOX_ID: '{{ sandboxid | downcase }}'
-  #       - API_PORT: '{{.inputs.API_PORT}}'
-  #       - PORT: '{{.inputs.PORT}}'
-
-
-# outputs:
-#   MYSQL_URL:
-#     value: 'jdbc:mysql://{{ .grains.mySqlDB.outputs.db_instance_address }}/{{ .grains.mySqlDB.outputs.db_instance_username }}'
-#   MYSQL_PASS:
-#     value: '{{ .grains.mySqlDB.outputs.db_instance_password }}'
-#   MYSQL_USER:
-#     value: '{{ .grains.mySqlDB.outputs.db_instance_username }}'
 
 outputs:
   url:
