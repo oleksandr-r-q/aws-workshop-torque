@@ -114,5 +114,5 @@ grains:
 #     value: '{{ .grains.mySqlDB.outputs.db_instance_username }}'
 
 outputs:
-  public_subnet:
+  url:
     value: 'http://{{ .grains.promotions-manager-all.outputs.public_dns }}:3000'
