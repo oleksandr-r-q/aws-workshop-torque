@@ -10,16 +10,16 @@ echo '==> Installing Node.js and NPM' >> ${ARTIFACTS_PATH}/ui.log
 apt-get update
 apt install curl -y
 curl -sL https://deb.nodesource.com/setup_10.x | bash -
-apt install nodejs >> ${ARTIFACTS_PATH}/ui.log
+apt install nodejs
 
 echo '==> Install nginx' >> ${ARTIFACTS_PATH}/ui.log
-apt-get install nginx -y >> ${ARTIFACTS_PATH}/ui.log
+apt-get install nginx -y
 
 echo '==> Extract ui artifact to /var/www/promotions-manager/' >> ${ARTIFACTS_PATH}/ui.log
 mkdir -p ${ARTIFACTS_PATH}/drop
-tar -xvf ${ARTIFACTS_PATH}/promotions-manager-ui.*.tar.gz -C ${ARTIFACTS_PATH}/drop/ >> ${ARTIFACTS_PATH}/ui.log
+tar -xvf ${ARTIFACTS_PATH}/promotions-manager-ui.*.tar.gz -C ${ARTIFACTS_PATH}/drop/ >> ${ARTIFACTS_PATH}/ui.log 2>&1
 mkdir /var/www/promotions-manager/
-tar -xvf ${ARTIFACTS_PATH}/drop/drop/promotions-manager-ui.*.tar.gz -C /var/www/promotions-manager/ >> ${ARTIFACTS_PATH}/ui.log
+tar -xvf ${ARTIFACTS_PATH}/drop/drop/promotions-manager-ui.*.tar.gz -C /var/www/promotions-manager/ >> ${ARTIFACTS_PATH}/ui.log 2>&1
 
 echo '==> Configure nginx' >> ${ARTIFACTS_PATH}/ui.log
 cd /etc/nginx/sites-available/

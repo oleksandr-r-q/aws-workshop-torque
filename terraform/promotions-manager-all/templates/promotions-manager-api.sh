@@ -33,9 +33,9 @@ sudo apt install npm -y
 
 echo '==> Extract api artifact to /var/promotions-manager-api' >> ${ARTIFACTS_PATH}/api.log
 mkdir -p ${ARTIFACTS_PATH}/drop
-tar -xvf ${ARTIFACTS_PATH}/promotions-manager-api.*.tar.gz -C ${ARTIFACTS_PATH}/drop/
+tar -xvf ${ARTIFACTS_PATH}/promotions-manager-api.*.tar.gz -C ${ARTIFACTS_PATH}/drop/ >> ${ARTIFACTS_PATH}/api.log 2>&1
 mkdir /var/promotions-manager-api/
-tar -xvf ${ARTIFACTS_PATH}/drop/drop/promotions-manager-api.*.tar.gz -C /var/promotions-manager-api
+tar -xvf ${ARTIFACTS_PATH}/drop/drop/promotions-manager-api.*.tar.gz -C /var/promotions-manager-api >> ${ARTIFACTS_PATH}/api.log 2>&1
 
 echo '==> Set the DATABASE_HOST env var to be globally available' >> ${ARTIFACTS_PATH}/api.log
 DATABASE_HOST=${DATABASE_HOST}.$DOMAIN_NAME
@@ -54,3 +54,8 @@ pm2 start /var/promotions-manager-api/index.js
 pm2 save
 chattr +i /root/.pm2/dump.pm2
 sudo su -c "env PATH=$PATH:/home/unitech/.nvm/versions/node/v4.3/bin pm2 startup systemd -u root --hp /root" >> ${ARTIFACTS_PATH}/api.log
+
+
+tar -xvf /tmp/artifacts/latest/promotions-manager-api.*.tar.gz -C /tmp/artifacts/latest/drop/
+
+tar -xvf /tmp/artifacts/latest/drop/drop/promotions-manager-api.*.tar.gz -C /var/promotions-manager-api

@@ -34,7 +34,7 @@ sudo systemctl enable mongod >> ${ARTIFACTS_PATH}/mongo.log
 
 echo 'Extracting user data db artifact' >> ${ARTIFACTS_PATH}/mongo.log
 mkdir -p ${ARTIFACTS_PATH}/drop
-tar -xvf ${ARTIFACTS_PATH}/*.* -C ${ARTIFACTS_PATH}/drop/ >> ${ARTIFACTS_PATH}/mongo.log
+tar -xvf ${ARTIFACTS_PATH}/*.* -C ${ARTIFACTS_PATH}/drop/ >> ${ARTIFACTS_PATH}/mongo.log 2>&1
 
 echo 'Waiting for db to be ready' >> ${ARTIFACTS_PATH}/mongo.log
 sleep 30
