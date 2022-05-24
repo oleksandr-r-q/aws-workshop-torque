@@ -1,38 +1,30 @@
-provider "aws" {
-    region     = "${var.AWS_REGION}"
-    version    = "v2.70.0"
-}
-
 # Get VPC by sandbox id
-data "aws_vpc" "sandbox_vpc" {
-    filter {
-        name = "tag:torque-sandbox-id"
-        values = ["${var.SANDBOX_ID}"]
-    }    
-}
-
 # Get app subnets by sandbox id
-data "aws_subnet" "sandbox_app_subnet_0" {
-    vpc_id = "${data.aws_vpc.sandbox_vpc.id}"
+# data "aws_subnet" "sandbox_app_subnet_0" {
+#     vpc_id = var.vpc_id
 
-    filter {
-        name = "tag:Name"
-        values = ["app-subnet-0"]
-    }
-}
-data "aws_subnet" "sandbox_app_subnet_1" {
-    vpc_id = "${data.aws_vpc.sandbox_vpc.id}"
+#     filter {
+#         name = "tag:Name"
+#         values = ["app-subnet-0"]
+#     }
+# }
+# data "aws_subnet" "sandbox_app_subnet_1" {
+#     vpc_id = var.vpc_id
 
-    filter {
-        name = "tag:Name"
-        values = ["app-subnet-1"]
-    }
+#     filter {
+#         name = "tag:Name"
+#         values = ["app-subnet-1"]
+#     }
+# }
+
+data "aws_vpc" "sandbox_vpc" {
+  id = var.vpc_id
 }
 
 resource "aws_security_group" "docdb_sg" {
   name        = "docdb"
   description = "dobdb Security Group"
-  vpc_id      = "${data.aws_vpc.sandbox_vpc.id}"
+  vpc_id      = var.vpc_id
 
   ingress {
     description = "MongoDB from VPC"
@@ -68,7 +60,7 @@ resource "aws_docdb_cluster_parameter_group" "no_tls" {
 
 resource "aws_docdb_subnet_group" "default" {
   name       = "main-${var.SANDBOX_ID}"
-  subnet_ids = ["${data.aws_subnet.sandbox_app_subnet_0.id}", "${data.aws_subnet.sandbox_app_subnet_1.id}"]
+  subnet_ids = [var.public_subnet, var.public_subnet_1]
 
   tags = {
     Name = "torque document db sugnet group"
@@ -77,10 +69,10 @@ resource "aws_docdb_subnet_group" "default" {
 }
 
 resource "aws_docdb_cluster_instance" "cluster_instances" {
-    count              = 1
+    # count              = 1
     identifier         = "torque-sandbox-docdb-${var.SANDBOX_ID}"
     cluster_identifier = "${aws_docdb_cluster.default.id}"
-    instance_class     = "db.r5.large"
+    instance_class     = "db.t4g.medium"
     tags = {
         torque-sandbox-id = "${var.SANDBOX_ID}"
     }
@@ -108,7 +100,7 @@ resource "null_resource" "insert_data" {
     count = "${var.INSERT_DATA ? 1 : 0}"
 
     provisioner "local-exec" {
-        command = "chmod 777 insert_data.sh && ./insert_data.sh ${aws_docdb_cluster.default.endpoint} ${var.USERNAME} ${var.PASSWORD} ${var.DB_NAME} ${var.COLLECTION_NAME} ${aws_docdb_cluster_instance.cluster_instances[0].arn}"
+        command = "chmod 777 insert_data.sh && ./insert_data.sh ${aws_docdb_cluster.default.endpoint} ${var.USERNAME} ${var.PASSWORD} ${var.DB_NAME} ${var.COLLECTION_NAME} ${aws_docdb_cluster_instance.cluster_instances.arn}"
         interpreter = ["/bin/bash", "-c"]
     }
 }
