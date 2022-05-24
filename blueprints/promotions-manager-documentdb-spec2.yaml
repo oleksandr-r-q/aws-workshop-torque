@@ -25,10 +25,11 @@ inputs:
     default: none
   DB_USERNAME:
     type: string
+    display-style: normal
     default: adminuser
   DB_PASSWORD: 
     type: string
-    # sensitive: true
+    display-style: normal
     description: please set the master database password
     default: Welcome1234567+
   AWS_REGION:
