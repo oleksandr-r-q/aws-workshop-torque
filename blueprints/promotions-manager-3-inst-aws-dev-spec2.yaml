@@ -146,7 +146,7 @@ grains:
         - PORT: '{{.inputs.PORT}}'
         - RELEASE_NUMBER: '{{.inputs.RELEASE_NUMBER}}'
         - API_BUILD_NUMBER: '{{.inputs.API_BUILD_NUMBER}}'
-        - API_HOST: '{{ .grains.promotions-manager-api.outputs.private_ip }}'
+        - API_HOST: '{{ .grains.promotions-manager-api.outputs.private_dns }}'
         - private_ip: '10.0.101.103'
       outputs:
         - public_dns
