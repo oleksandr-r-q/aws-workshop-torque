@@ -70,7 +70,7 @@ grains:
     depends-on: vpc_test
     spec:
       source:
-        path: github.com/oleksandr-r-q/aws-workshop-torque/terraform/promotions-manager-all
+        path: github.com/oleksandr-r-q/aws-workshop-torque/terraform/mongodb
       host:
         cloud-account: AWS
         compute-service: eks-torque-demo-oleksandrr1
@@ -87,6 +87,7 @@ grains:
         - PORT: '{{.inputs.PORT}}'
         - RELEASE_NUMBER: '{{.inputs.RELEASE_NUMBER}}'
         - API_BUILD_NUMBER: '{{.inputs.API_BUILD_NUMBER}}'
+        - private_ip: '10.0.101.101'
       outputs:
         - public_dns
         - public_ip
@@ -98,7 +99,7 @@ grains:
     depends-on: mongodb, vpc_test
     spec:
       source:
-        path: github.com/oleksandr-r-q/aws-workshop-torque/terraform/promotions-manager-all
+        path: github.com/oleksandr-r-q/aws-workshop-torque/terraform/promotions-manager-api
       host:
         cloud-account: AWS
         compute-service: eks-torque-demo-oleksandrr1
@@ -116,6 +117,7 @@ grains:
         - RELEASE_NUMBER: '{{.inputs.RELEASE_NUMBER}}'
         - API_BUILD_NUMBER: '{{.inputs.API_BUILD_NUMBER}}'
         - DATABASE_HOST: '{{ .grains.mongodb.outputs.private_ip }}'
+        - private_ip: '10.0.101.102'
       outputs:
         - public_dns
         - public_ip
@@ -127,7 +129,7 @@ grains:
     depends-on: vpc_test, promotions-manager-api
     spec:
       source:
-        path: github.com/oleksandr-r-q/aws-workshop-torque/terraform/promotions-manager-all
+        path: github.com/oleksandr-r-q/aws-workshop-torque/terraform/promotions-manager-ui
       host:
         cloud-account: AWS
         compute-service: eks-torque-demo-oleksandrr1
@@ -145,6 +147,7 @@ grains:
         - RELEASE_NUMBER: '{{.inputs.RELEASE_NUMBER}}'
         - API_BUILD_NUMBER: '{{.inputs.API_BUILD_NUMBER}}'
         - API_HOST: '{{ .grains.promotions-manager-api.outputs.private_ip }}'
+        - private_ip: '10.0.101.103'
       outputs:
         - public_dns
         - public_ip

@@ -51,7 +51,7 @@ variable "API_HOST" {
 }
 
 variable "private_ip" {
-  default = "10.0.101.100"
+  default = "10.0.101.103"
 }
 
 variable "DATABASE_HOST" {
