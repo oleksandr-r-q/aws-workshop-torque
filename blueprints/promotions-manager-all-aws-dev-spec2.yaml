@@ -70,7 +70,7 @@ grains:
     depends-on: vpc_test
     spec:
       source:
-        path: https://github.com/oleksandr-r-q/aws-workshop-torque.git//terraform/promotions-manager-all
+        path: github.com/oleksandr-r-q/aws-workshop-torque/terraform/promotions-manager-all
       host:
         cloud-account: AWS
         compute-service: eks-torque-demo-oleksandrr1
