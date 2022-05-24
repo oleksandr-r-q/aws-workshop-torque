@@ -24,12 +24,13 @@ echo "deb [signed-by=$KEYRING] http://deb.nodesource.com/$VERSION $DISTRO main" 
 echo "deb-src [signed-by=$KEYRING] http://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
 sudo apt-get update -y
 sudo apt-get install nodejs -y --allow-unauthenticated
+echo 'done install nodejs' >> ${ARTIFACTS_PATH}/api.log
 
 echo '==> Installing npm' >> ${ARTIFACTS_PATH}/api.log
-sudo apt install libssl1.0-dev -y
-sudo apt install nodejs-dev -y
+sudo apt install libssl-dev -y
+# sudo apt install nodejs-dev -y
 sudo apt install node-gyp -y
-sudo apt install npm -y
+# sudo apt install npm -y
 
 
 echo '==> Extract api artifact to /var/promotions-manager-api' >> ${ARTIFACTS_PATH}/api.log
