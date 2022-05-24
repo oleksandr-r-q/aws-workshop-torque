@@ -68,30 +68,31 @@ grains:
         - vpc_id
         - public_subnet_1
 
-  docdb:
-    kind: terraform
-    depends-on: vpc_test
-    spec:
-      source:
-        path: github.com/oleksandr-r-q/aws-workshop-torque/terraform/aws-document-db
-      host:
-        cloud-account: AWS
-        compute-service: eks-torque-demo-oleksandrr1
-      inputs:
-        - SANDBOX_ID: '{{ sandboxid | downcase }}'
-        - instance_type: '{{.inputs.AWS_INSTANCE_TYPE}}'
-        - AWS_REGION: '{{.inputs.AWS_REGION}}'
-        - DB_USERNAME: '{{.inputs.DB_USERNAME}}'
-        - DB_PASSWORD: '{{.inputs.DB_PASSWORD}}'
-        - vpc_id: '{{ .grains.vpc_test.outputs.vpc_id }}'
-        - public_subnet_1: '{{ .grains.vpc_test.outputs.public_subnet_1 }}'
-        - public_subnet: '{{ .grains.vpc_test.outputs.public_subnet }}'
-      outputs:
-        - connection_string
+  # docdb:
+  #   kind: terraform
+  #   depends-on: vpc_test
+  #   spec:
+  #     source:
+  #       path: github.com/oleksandr-r-q/aws-workshop-torque/terraform/aws-document-db
+  #     host:
+  #       cloud-account: AWS
+  #       compute-service: eks-torque-demo-oleksandrr1
+  #     inputs:
+  #       - SANDBOX_ID: '{{ sandboxid | downcase }}'
+  #       - instance_type: '{{.inputs.AWS_INSTANCE_TYPE}}'
+  #       - AWS_REGION: '{{.inputs.AWS_REGION}}'
+  #       - DB_USERNAME: '{{.inputs.DB_USERNAME}}'
+  #       - DB_PASSWORD: '{{.inputs.DB_PASSWORD}}'
+  #       - vpc_id: '{{ .grains.vpc_test.outputs.vpc_id }}'
+  #       - public_subnet_1: '{{ .grains.vpc_test.outputs.public_subnet_1 }}'
+  #       - public_subnet: '{{ .grains.vpc_test.outputs.public_subnet }}'
+  #     outputs:
+  #       - connection_string
 
   promotions-manager-api:
     kind: terraform
-    depends-on: docdb, vpc_test
+    # depends-on: docdb, vpc_test
+    depends-on: vpc_test
     spec:
       source:
         path: github.com/oleksandr-r-q/aws-workshop-torque/terraform/promotions-manager-api
@@ -111,7 +112,8 @@ grains:
         - PORT: '{{.inputs.PORT}}'
         - RELEASE_NUMBER: '{{.inputs.RELEASE_NUMBER}}'
         - API_BUILD_NUMBER: '{{.inputs.API_BUILD_NUMBER}}'
-        - DATABASE_HOST: '{{ .grains.docdb.outputs.connection_string }}'
+        - DATABASE_HOST: test
+        # - DATABASE_HOST: '{{ .grains.docdb.outputs.connection_string }}'
         - private_ip: '10.0.101.102'
       outputs:
         - public_dns
