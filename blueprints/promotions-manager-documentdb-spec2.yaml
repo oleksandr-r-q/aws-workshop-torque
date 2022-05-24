@@ -143,7 +143,7 @@ grains:
         - RELEASE_NUMBER: '{{.inputs.RELEASE_NUMBER}}'
         - API_BUILD_NUMBER: '{{.inputs.API_BUILD_NUMBER}}'
         # - API_HOST: '{{ .grains.promotions-manager-api.outputs.private_dns }}'
-        - API_HOST: test
+        - API_HOST: localhost
         - private_ip: '10.0.101.103'
       outputs:
         - public_dns
