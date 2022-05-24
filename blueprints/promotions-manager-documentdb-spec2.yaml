@@ -89,41 +89,40 @@ grains:
   #     outputs:
   #       - connection_string
 
-  promotions-manager-api:
-    kind: terraform
-    # depends-on: docdb, vpc_test
-    depends-on: vpc_test
-    spec:
-      source:
-        path: github.com/oleksandr-r-q/aws-workshop-torque/terraform/promotions-manager-api
-      host:
-        cloud-account: AWS
-        compute-service: eks-torque-demo-oleksandrr1
-      inputs:
-        - SANDBOX_ID: '{{ sandboxid | downcase }}'
-        - instance_type: '{{.inputs.AWS_INSTANCE_TYPE}}'
-        - AWS_REGION: '{{.inputs.AWS_REGION}}'
-        - instance_profile: '{{ .grains.vpc_test.outputs.instance_profile }}'
-        - public_subnet: '{{ .grains.vpc_test.outputs.public_subnet }}'
-        - aws_security_group_id: '{{ .grains.vpc_test.outputs.aws_security_group_id }}'
-        - env: '{{.inputs.Environment}}'
-        - aws_s3_bucket: '{{.inputs.aws_s3_bucket}}'
-        - API_PORT: '{{.inputs.API_PORT}}'
-        - PORT: '{{.inputs.PORT}}'
-        - RELEASE_NUMBER: '{{.inputs.RELEASE_NUMBER}}'
-        - API_BUILD_NUMBER: '{{.inputs.API_BUILD_NUMBER}}'
-        - DATABASE_HOST: test
-        # - DATABASE_HOST: '{{ .grains.docdb.outputs.connection_string }}'
-        - private_ip: '10.0.101.102'
-      outputs:
-        - public_dns
-        - public_ip
-        - private_ip
-        - private_dns
+  # promotions-manager-api:
+  #   kind: terraform
+  #   depends-on: docdb, vpc_test
+  #   spec:
+  #     source:
+  #       path: github.com/oleksandr-r-q/aws-workshop-torque/terraform/promotions-manager-api
+  #     host:
+  #       cloud-account: AWS
+  #       compute-service: eks-torque-demo-oleksandrr1
+  #     inputs:
+  #       - SANDBOX_ID: '{{ sandboxid | downcase }}'
+  #       - instance_type: '{{.inputs.AWS_INSTANCE_TYPE}}'
+  #       - AWS_REGION: '{{.inputs.AWS_REGION}}'
+  #       - instance_profile: '{{ .grains.vpc_test.outputs.instance_profile }}'
+  #       - public_subnet: '{{ .grains.vpc_test.outputs.public_subnet }}'
+  #       - aws_security_group_id: '{{ .grains.vpc_test.outputs.aws_security_group_id }}'
+  #       - env: '{{.inputs.Environment}}'
+  #       - aws_s3_bucket: '{{.inputs.aws_s3_bucket}}'
+  #       - API_PORT: '{{.inputs.API_PORT}}'
+  #       - PORT: '{{.inputs.PORT}}'
+  #       - RELEASE_NUMBER: '{{.inputs.RELEASE_NUMBER}}'
+  #       - API_BUILD_NUMBER: '{{.inputs.API_BUILD_NUMBER}}'
+  #       - DATABASE_HOST: '{{ .grains.docdb.outputs.connection_string }}'
+  #       - private_ip: '10.0.101.102'
+  #     outputs:
+  #       - public_dns
+  #       - public_ip
+  #       - private_ip
+  #       - private_dns
 
   promotions-manager-ui:
     kind: terraform
-    depends-on: vpc_test, promotions-manager-api
+    # depends-on: vpc_test, promotions-manager-api
+    depends-on: vpc_test
     spec:
       source:
         path: github.com/oleksandr-r-q/aws-workshop-torque/terraform/promotions-manager-ui
@@ -143,7 +142,8 @@ grains:
         - PORT: '{{.inputs.PORT}}'
         - RELEASE_NUMBER: '{{.inputs.RELEASE_NUMBER}}'
         - API_BUILD_NUMBER: '{{.inputs.API_BUILD_NUMBER}}'
-        - API_HOST: '{{ .grains.promotions-manager-api.outputs.private_dns }}'
+        # - API_HOST: '{{ .grains.promotions-manager-api.outputs.private_dns }}'
+        - API_HOST: test
         - private_ip: '10.0.101.103'
       outputs:
         - public_dns
