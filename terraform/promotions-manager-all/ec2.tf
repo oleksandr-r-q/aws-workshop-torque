@@ -28,70 +28,70 @@ resource "aws_instance" "promotions-manager" {
   vpc_security_group_ids = [var.aws_security_group_id]
   subnet_id = var.public_subnet
 
-  # user_data = data.template_cloudinit_config.promotions-manager.rendered
+  user_data = data.template_cloudinit_config.promotions-manager.rendered
 
-    user_data = templatefile("mongodb.sh", { S3 = var.aws_s3_bucket, ARTIFACTS_PATH = "/tmp/${var.artifacts_path_mongodb}"})
+    # user_data = templatefile("mongodb.sh", { S3 = var.aws_s3_bucket, ARTIFACTS_PATH = "/tmp/${var.artifacts_path_mongodb}"})
   tags = {
     Name = "promotions-manager-${var.SANDBOX_ID}"
   }
 }
 
 
-# data "template_cloudinit_config" "promotions-manager" {
-#   gzip          = true
-#   base64_encode = true
+data "template_cloudinit_config" "promotions-manager" {
+  gzip          = true
+  base64_encode = true
 
-#   # artifacts
-#   part {
-#     content = templatefile(
-#       "${path.module}/templates/artifacts.sh",
-#       {
-#         S3  = var.aws_s3_bucket,
-#         ARTIFACTS_PATH = "/tmp"
-#       }
-#     )
-#   }
+  # artifacts
+  part {
+    content = templatefile(
+      "${path.module}/templates/artifacts.sh",
+      {
+        S3  = var.aws_s3_bucket,
+        ARTIFACTS_PATH = "/tmp"
+      }
+    )
+  }
 
-#   # mongodb
-#   part {
-#     content = templatefile(
-#       "${path.module}/templates/mongodb.sh",
-#       {
-#         S3  = var.aws_s3_bucket,
-#         ARTIFACTS_PATH = "/tmp/${var.artifacts_path_mongodb}"
-#       }
-#     )
-#   }
+  # mongodb
+  part {
+    content = templatefile(
+      "${path.module}/templates/mongodb.sh",
+      {
+        S3  = var.aws_s3_bucket,
+        ARTIFACTS_PATH = "/tmp/${var.artifacts_path_mongodb}"
+      }
+    )
+  }
 
-#   # promotions-manager-api
-#   part {
-#     content = templatefile(
-#       "${path.module}/templates/promotions-manager-api.sh",
-#       {
-#         S3  = var.aws_s3_bucket,
-#         ARTIFACTS_PATH = "/tmp/${var.artifacts_path_promotions-manager-api}",
-#         DATABASE_HOST  = "127.0.0.1",
-#         RELEASE_NUMBER = var.RELEASE_NUMBER,
-#         API_BUILD_NUMBER = var.API_BUILD_NUMBER,
-#         API_PORT = var.API_PORT,
-#         PORT = var.PORT
-#       }
-#     )
-#   }
+  # promotions-manager-api
+  part {
+    content = templatefile(
+      "${path.module}/templates/promotions-manager-api.sh",
+      {
+        S3  = var.aws_s3_bucket,
+        ARTIFACTS_PATH = "/tmp/${var.artifacts_path_promotions-manager-api}",
+        DATABASE_HOST  = "127.0.0.1",
+        RELEASE_NUMBER = var.RELEASE_NUMBER,
+        API_BUILD_NUMBER = var.API_BUILD_NUMBER,
+        API_PORT = var.API_PORT,
+        PORT = var.PORT
+      }
+    )
+  }
 
-#     # promotions-manager-ui
-#   part {
-#     content = templatefile(
-#       "${path.module}/templates/promotions-manager-ui.sh",
-#       {
-#         S3  = var.aws_s3_bucket,
-#         ARTIFACTS_PATH = "/tmp/${var.artifacts_path_promotions-manager-ui}",
-#         API_PORT = var.API_PORT,
-#         PORT = var.PORT
-#       }
-#     )
-#   }
-# }
+    # promotions-manager-ui
+  part {
+    content = templatefile(
+      "${path.module}/templates/promotions-manager-ui.sh",
+      {
+        S3  = var.aws_s3_bucket,
+        ARTIFACTS_PATH = "/tmp/${var.artifacts_path_promotions-manager-ui}",
+        API_PORT = var.API_PORT,
+        PORT = var.PORT
+      }
+    )
+  }
+}
 
 # artifacts:
 #   - promotions-manager-ui: artifacts/latest/promotions-manager-ui.master.tar.gz
