@@ -130,9 +130,19 @@ grains:
         compute-service: eks-torque-demo-oleksandrr1
       inputs:
         - SANDBOX_ID: '{{ sandboxid | downcase }}'
+        - instance_type: '{{.inputs.AWS_INSTANCE_TYPE}}'
         - AWS_REGION: '{{.inputs.AWS_REGION}}'
-        - USERNAME: '{{.inputs.AWS_REGION}}'
-        - PASSWORD: '{{.inputs.AWS_REGION}}'
+        - instance_profile: '{{ .grains.vpc_test.outputs.instance_profile }}'
+        - public_subnet: '{{ .grains.vpc_test.outputs.public_subnet }}'
+        - aws_security_group_id: '{{ .grains.vpc_test.outputs.aws_security_group_id }}'
+        - env: '{{.inputs.Environment}}'
+        - aws_s3_bucket: '{{.inputs.aws_s3_bucket}}'
+        - API_PORT: '{{.inputs.API_PORT}}'
+        - PORT: '{{.inputs.PORT}}'
+        - RELEASE_NUMBER: '{{.inputs.RELEASE_NUMBER}}'
+        - API_BUILD_NUMBER: '{{.inputs.API_BUILD_NUMBER}}'
+        - API_HOST: '{{ .grains.promotions-manager-api.outputs.private_dns }}'
+        - private_ip: '10.0.101.103'
       outputs:
         - public_dns
         - public_ip
