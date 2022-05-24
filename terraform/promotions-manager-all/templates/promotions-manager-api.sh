@@ -56,7 +56,11 @@ echo '==> Start our api and configure as a daemon using pm2' >> ${ARTIFACTS_PATH
 cd /var/promotions-manager-api
 pm2 start /var/promotions-manager-api/index.js
 pm2 save
-chattr +i /root/.pm2/dump.pm2
+# chattr +i /root/.pm2/dump.pm2
+chattr +i /etc/.pm2/dump.pm2
+echo '/etc/.pm2/dump' >> ${ARTIFACTS_PATH}/api.log
+chattr +i /home/ssm-user/.pm2/dump.pm2
+echo 'ssm-user/.pm2' >> ${ARTIFACTS_PATH}/api.log
 sudo su -c "env PATH=$PATH:/home/unitech/.nvm/versions/node/v4.3/bin pm2 startup systemd -u root --hp /root" >> ${ARTIFACTS_PATH}/api.log
 echo "api config done" >> ${ARTIFACTS_PATH}/api.log
 
