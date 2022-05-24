@@ -14,7 +14,7 @@ echo '==> Installing node 10' >> ${ARTIFACTS_PATH}/api.log
 sudo add-apt-repository -y -r ppa:chris-lea/node.js
 sudo rm -f /etc/apt/sources.list.d/chris-lea-node_js-*.list
 sudo rm -f /etc/apt/sources.list.d/chris-lea-node_js-*.list.save
-KEYRING=/usr/share/keyrings/nodesource.gpg
+KEYRING="/usr/share/keyrings/nodesource.gpg"
 wget --quiet -O - https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | sudo tee "$KEYRING" >/dev/null
 gpg --no-default-keyring --keyring "$KEYRING" --list-keys
 VERSION=node_10.x

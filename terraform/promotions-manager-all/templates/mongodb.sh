@@ -11,7 +11,7 @@ apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DC
 echo 'Create a file list for mongoDB to fetch the current repository'
 echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list
 
-echo ' Update the Ubuntu Packages' >> ${ARTIFACTS_PATH}/mongo.log
+echo 'Update the Ubuntu Packages' >> ${ARTIFACTS_PATH}/mongo.log
 apt-get update 
 
 echo 'Install MongoDB' >> ${ARTIFACTS_PATH}/mongo.log
@@ -34,8 +34,8 @@ sudo systemctl enable mongod >> ${ARTIFACTS_PATH}/mongo.log
 
 echo 'Extracting user data db artifact' >> ${ARTIFACTS_PATH}/mongo.log
 mkdir -p ${ARTIFACTS_PATH}/drop
-echo "tar -xvf ${ARTIFACTS_PATH}/*.* -C ${ARTIFACTS_PATH}/drop/ >> ${ARTIFACTS_PATH}/mongo.log" >> ${ARTIFACTS_PATH}/mongo.log
-tar -xvf ${ARTIFACTS_PATH}/*.* -C ${ARTIFACTS_PATH}/drop/ >> ${ARTIFACTS_PATH}/mongo.log 2>&1
+echo "tar -xvf ${ARTIFACTS_PATH}/*.tar -C ${ARTIFACTS_PATH}/drop/ >> ${ARTIFACTS_PATH}/mongo.log
+tar -xvf ${ARTIFACTS_PATH}/*.tar -C ${ARTIFACTS_PATH}/drop/ >> ${ARTIFACTS_PATH}/mongo.log 2>&1
 
 echo 'Waiting for db to be ready' >> ${ARTIFACTS_PATH}/mongo.log
 sleep 30
