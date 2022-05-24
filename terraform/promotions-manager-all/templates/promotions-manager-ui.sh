@@ -5,7 +5,6 @@ echo '=============== Staring init script for Promotions Manager UI ============
 
 # save all env for debugging
 printenv > /var/log/colony-vars-"$(basename "$BASH_SOURCE" .sh)".txt
-
 echo '==> Installing Node.js and NPM' >> ${ARTIFACTS_PATH}/ui.log
 apt-get update
 apt install curl -y
@@ -26,7 +25,7 @@ tar -xvf ${ARTIFACTS_PATH}/drop/drop/promotions-manager-ui.*.tar.gz -C /var/www/
 echo '==> Configure nginx' >> ${ARTIFACTS_PATH}/ui.log
 cd /etc/nginx/sites-available/
 cp default default.backup
-
+# proxy_pass http://promotions-manager-api.$DOMAIN_NAME:${API_PORT}/api;
 cat << EOF > ./default
 server {
 	listen ${PORT} default_server;
@@ -35,7 +34,7 @@ server {
 	server_name _;
 	index index.html index.htm;
 	location /api {		
-		proxy_pass http://promotions-manager-api.$DOMAIN_NAME:${API_PORT}/api;
+		proxy_pass http://localhost/api;
 		proxy_http_version 1.1;
 		proxy_set_header Upgrade \$http_upgrade;
 		proxy_set_header Connection 'upgrade';
