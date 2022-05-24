@@ -30,7 +30,7 @@ resource "aws_instance" "promotions-manager" {
 
   user_data = data.template_cloudinit_config.promotions-manager.rendered
   tags = {
-    Name = "promotions-manager-${var.SANDBOX_ID}"
+    Name = "promotions-manager-api-${var.SANDBOX_ID}"
   }
 }
 

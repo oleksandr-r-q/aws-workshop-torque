@@ -30,7 +30,7 @@ resource "aws_instance" "promotions-manager" {
 
   user_data = data.template_cloudinit_config.promotions-manager.rendered
   tags = {
-    Name = "promotions-manager-${var.SANDBOX_ID}"
+    Name = "promotions-manager-ui-${var.SANDBOX_ID}"
   }
 }
 
@@ -46,33 +46,6 @@ data "template_cloudinit_config" "promotions-manager" {
       {
         S3             = var.aws_s3_bucket,
         ARTIFACTS_PATH = "/tmp"
-      }
-    )
-  }
-
-  # mongodb
-  part {
-    content = templatefile(
-      "${path.module}/templates/mongodb.sh",
-      {
-        S3             = var.aws_s3_bucket,
-        ARTIFACTS_PATH = "/tmp/${var.artifacts_path_mongodb}"
-      }
-    )
-  }
-
-  # promotions-manager-api
-  part {
-    content = templatefile(
-      "${path.module}/templates/promotions-manager-api.sh",
-      {
-        S3               = var.aws_s3_bucket,
-        ARTIFACTS_PATH   = "/tmp/${var.artifacts_path_promotions-manager-api}",
-        DATABASE_HOST    = var.DATABASE_HOST,
-        RELEASE_NUMBER   = var.RELEASE_NUMBER,
-        API_BUILD_NUMBER = var.API_BUILD_NUMBER,
-        API_PORT         = var.API_PORT,
-        PORT             = var.PORT
       }
     )
   }
