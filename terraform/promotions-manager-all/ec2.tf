@@ -30,7 +30,7 @@ resource "aws_instance" "promotions-manager" {
 
   # user_data = data.template_cloudinit_config.promotions-manager.rendered
 
-    user_data = templatefile("mongodb.sh", { S3 = "${var.aws_s3_bucket}", ARTIFACTS_PATH = "/tmp/${var.artifacts_path_mongodb}"})
+    user_data = templatefile("mongodb.sh", { S3 = var.aws_s3_bucket, ARTIFACTS_PATH = "/tmp/${var.artifacts_path_mongodb}"})
   tags = {
     Name = "promotions-manager-${var.SANDBOX_ID}"
   }
