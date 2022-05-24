@@ -1,6 +1,6 @@
 #!/bin/bash -x
 touch ${ARTIFACTS_PATH}/mongo.log
-echo 'Installing mongodb 4.0' 2>&1 >> ${ARTIFACTS_PATH}/mongo.log
+echo 'Installing mongodb 4.0' >> ${ARTIFACTS_PATH}/mongo.log
 
 # save all env for debugging
 printenv > /var/log/colony-vars-"$(basename "$BASH_SOURCE" .sh)".txt
@@ -15,7 +15,7 @@ echo ' Update the Ubuntu Packages'
 apt-get update 
 
 echo 'Install MongoDB'
-apt-get install -y mongodb-org 2>&1 >> ${ARTIFACTS_PATH}/mongo.log
+apt-get install -y mongodb-org >> ${ARTIFACTS_PATH}/mongo.log
 # prevent auto updates
 echo "mongodb-org hold" | sudo dpkg --set-selections
 echo "mongodb-org-server hold" | sudo dpkg --set-selections
@@ -26,20 +26,20 @@ echo "mongodb-org-tools hold" | sudo dpkg --set-selections
 echo 'Change mongoDB Listening IP Address from local 127.0.0.1 to All IPs 0.0.0.0'
 sed -i 's/127\.0\.0\.1/0\.0\.0\.0/g' /etc/mongod.conf
 
-echo 'Start the mongo service'
-service mongod start 2>&1 >> ${ARTIFACTS_PATH}/mongo.log
+echo 'Start the mongo service' >> ${ARTIFACTS_PATH}/mongo.log
+service mongod start >> ${ARTIFACTS_PATH}/mongo.log
 
-echo 'Enable automatically starting MongoDB when the system starts.'
-sudo systemctl enable mongod 2>&1 >> ${ARTIFACTS_PATH}/mongo.log
+echo 'Enable automatically starting MongoDB when the system starts.' >> ${ARTIFACTS_PATH}/mongo.log
+sudo systemctl enable mongod >> ${ARTIFACTS_PATH}/mongo.log
 
-echo 'Extracting user data db artifact'
+echo 'Extracting user data db artifact' >> ${ARTIFACTS_PATH}/mongo.log
 mkdir -p ${ARTIFACTS_PATH}/drop
-tar -xvf ${ARTIFACTS_PATH}/*.* -C ${ARTIFACTS_PATH}/drop/ 2>&1 >> ${ARTIFACTS_PATH}/mongo.log
+tar -xvf ${ARTIFACTS_PATH}/*.* -C ${ARTIFACTS_PATH}/drop/ >> ${ARTIFACTS_PATH}/mongo.log
 
-echo 'Waiting for db to be ready'
+echo 'Waiting for db to be ready' >> ${ARTIFACTS_PATH}/mongo.log
 sleep 30
 
-echo 'Import all collections from artifact'
+echo 'Import all collections from artifact' >> ${ARTIFACTS_PATH}/mongo.log
 cd ${ARTIFACTS_PATH}/drop
 for f in ./*.json; do
 	temp_var="$${f%.*}"
@@ -48,6 +48,6 @@ for f in ./*.json; do
 done
 
 
-echo 'Run mongodb service' 2>&1 >> ${ARTIFACTS_PATH}/mongo.log
+echo 'Run mongodb service' >> ${ARTIFACTS_PATH}/mongo.log
 # Start the MongoDB Service
-service mongod start 2>&1 >> ${ARTIFACTS_PATH}/mongo.log
+service mongod start >> ${ARTIFACTS_PATH}/mongo.log

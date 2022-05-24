@@ -6,22 +6,22 @@ echo '=============== Staring init script for Promotions Manager UI ============
 # save all env for debugging
 printenv > /var/log/colony-vars-"$(basename "$BASH_SOURCE" .sh)".txt
 
-echo '==> Installing Node.js and NPM'
+echo '==> Installing Node.js and NPM' >> ${ARTIFACTS_PATH}/ui.log
 apt-get update
 apt install curl -y
 curl -sL https://deb.nodesource.com/setup_10.x | bash -
-apt install nodejs 2>&1 >> ${ARTIFACTS_PATH}/ui.log
+apt install nodejs >> ${ARTIFACTS_PATH}/ui.log
 
-echo '==> Install nginx'
-apt-get install nginx -y
+echo '==> Install nginx' >> ${ARTIFACTS_PATH}/ui.log
+apt-get install nginx -y >> ${ARTIFACTS_PATH}/ui.log
 
-echo '==> Extract ui artifact to /var/www/promotions-manager/' 2>&1 >> ${ARTIFACTS_PATH}/ui.log
+echo '==> Extract ui artifact to /var/www/promotions-manager/' >> ${ARTIFACTS_PATH}/ui.log
 mkdir -p ${ARTIFACTS_PATH}/drop
-tar -xvf ${ARTIFACTS_PATH}/promotions-manager-ui.*.tar.gz -C ${ARTIFACTS_PATH}/drop/ 2>&1 >> ${ARTIFACTS_PATH}/ui.log
+tar -xvf ${ARTIFACTS_PATH}/promotions-manager-ui.*.tar.gz -C ${ARTIFACTS_PATH}/drop/ >> ${ARTIFACTS_PATH}/ui.log
 mkdir /var/www/promotions-manager/
-tar -xvf ${ARTIFACTS_PATH}/drop/drop/promotions-manager-ui.*.tar.gz -C /var/www/promotions-manager/ 2>&1 >> ${ARTIFACTS_PATH}/ui.log
+tar -xvf ${ARTIFACTS_PATH}/drop/drop/promotions-manager-ui.*.tar.gz -C /var/www/promotions-manager/ >> ${ARTIFACTS_PATH}/ui.log
 
-echo '==> Configure nginx'
+echo '==> Configure nginx' >> ${ARTIFACTS_PATH}/ui.log
 cd /etc/nginx/sites-available/
 cp default default.backup
 
@@ -47,6 +47,6 @@ server {
 }
 EOF
 
-echo 'Start nginx service' 2>&1 >> ${ARTIFACTS_PATH}/ui.log
-service nginx stop 2>&1 >> ${ARTIFACTS_PATH}/ui.log
-service nginx start 2>&1 >> ${ARTIFACTS_PATH}/ui.log
+echo 'Start nginx service' >> ${ARTIFACTS_PATH}/ui.log
+service nginx stop >> ${ARTIFACTS_PATH}/ui.log
+service nginx start >> ${ARTIFACTS_PATH}/ui.log

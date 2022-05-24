@@ -4,11 +4,11 @@ touch ${ARTIFACTS_PATH}/api.log
 # save all env for debugging
 printenv > /var/log/colony-vars-"$(basename "$BASH_SOURCE" .sh)".txt
 
-echo '==> apt-get update' 2>&1 >> ${ARTIFACTS_PATH}/api.log
+echo '==> apt-get update' >> ${ARTIFACTS_PATH}/api.log
 apt-get update -y
 
-echo '==> Instal curl' 2>&1 >> ${ARTIFACTS_PATH}/api.log
-apt-get install curl -y 2>&1 >> ${ARTIFACTS_PATH}/api.log
+echo '==> Instal curl' >> ${ARTIFACTS_PATH}/api.log
+apt-get install curl -y >> ${ARTIFACTS_PATH}/api.log
 
 echo '==> Installing node 10'
 sudo add-apt-repository -y -r ppa:chris-lea/node.js
@@ -22,7 +22,7 @@ DISTRO="$(lsb_release -s -c)"
 echo "deb [signed-by=$KEYRING] http://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee /etc/apt/sources.list.d/nodesource.list
 echo "deb-src [signed-by=$KEYRING] http://deb.nodesource.com/$VERSION $DISTRO main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
 sudo apt-get update -y
-sudo apt-get install nodejs -y --allow-unauthenticated 2>&1 >> ${ARTIFACTS_PATH}/api.log
+sudo apt-get install nodejs -y --allow-unauthenticated >> ${ARTIFACTS_PATH}/api.log
 
 echo '==> Installing npm'
 sudo apt install libssl1.0-dev -y
@@ -31,11 +31,11 @@ sudo apt install node-gyp -y
 sudo apt install npm -y
 
 
-echo '==> Extract api artifact to /var/promotions-manager-api' 2>&1 >> ${ARTIFACTS_PATH}/api.log
+echo '==> Extract api artifact to /var/promotions-manager-api' >> ${ARTIFACTS_PATH}/api.log
 mkdir -p ${ARTIFACTS_PATH}/drop
-tar -xvf ${ARTIFACTS_PATH}/promotions-manager-api.*.tar.gz -C ${ARTIFACTS_PATH}/drop/ 2>&1 >> ${ARTIFACTS_PATH}/api.log
+tar -xvf ${ARTIFACTS_PATH}/promotions-manager-api.*.tar.gz -C ${ARTIFACTS_PATH}/drop/ >> ${ARTIFACTS_PATH}/api.log
 mkdir /var/promotions-manager-api/
-tar -xvf ${ARTIFACTS_PATH}/drop/drop/promotions-manager-api.*.tar.gz -C /var/promotions-manager-api 2>&1 >> ${ARTIFACTS_PATH}/api.log
+tar -xvf ${ARTIFACTS_PATH}/drop/drop/promotions-manager-api.*.tar.gz -C /var/promotions-manager-api >> ${ARTIFACTS_PATH}/api.log
 
 echo '==> Set the DATABASE_HOST env var to be globally available'
 DATABASE_HOST=${DATABASE_HOST}.$DOMAIN_NAME
@@ -45,12 +45,12 @@ echo 'API_BUILD_NUMBER='{$API_BUILD_NUMBER} >> /etc/environment
 echo 'API_PORT='${API_PORT} >> /etc/environment
 source /etc/environment
 
-echo '==> Install PM2, it provides an easy way to manage and daemonize nodejs applications' 2>&1 >> ${ARTIFACTS_PATH}/api.log
-npm install -g pm2 -y 2>&1 >> ${ARTIFACTS_PATH}/api.log
+echo '==> Install PM2, it provides an easy way to manage and daemonize nodejs applications' >> ${ARTIFACTS_PATH}/api.log
+npm install -g pm2 -y >> ${ARTIFACTS_PATH}/api.log
 
-echo '==> Start our api and configure as a daemon using pm2'
+echo '==> Start our api and configure as a daemon using pm2' >> ${ARTIFACTS_PATH}/api.log
 cd /var/promotions-manager-api
 pm2 start /var/promotions-manager-api/index.js
 pm2 save
 chattr +i /root/.pm2/dump.pm2
-sudo su -c "env PATH=$PATH:/home/unitech/.nvm/versions/node/v4.3/bin pm2 startup systemd -u root --hp /root" 2>&1 >> ${ARTIFACTS_PATH}/api.log
+sudo su -c "env PATH=$PATH:/home/unitech/.nvm/versions/node/v4.3/bin pm2 startup systemd -u root --hp /root" >> ${ARTIFACTS_PATH}/api.log
