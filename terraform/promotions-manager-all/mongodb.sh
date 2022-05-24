@@ -1,8 +1,9 @@
 #!/bin/bash -xe
+apt update
+apt install -y awscli
 mkdir -p ${ARTIFACTS_PATH}
-# aws s3 cp s3://${S3} $ARTIFACTS_PATH
 
-aws s3 cp s3://${S3} /tmp --recursive
+aws s3 cp s3://artifact-repo-promotionapp-oleksandr /tmp --recursive
 touch ${ARTIFACTS_PATH}/mongo.log
 echo 'Installing mongodb 4.0' >> ${ARTIFACTS_PATH}/mongo.log
 
