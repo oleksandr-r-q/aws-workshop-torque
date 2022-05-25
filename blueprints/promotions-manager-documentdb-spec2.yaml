@@ -86,6 +86,7 @@ grains:
         - vpc_id: '{{ .grains.vpc_test.outputs.vpc_id }}'
         - public_subnet_1: '{{ .grains.vpc_test.outputs.public_subnet_1 }}'
         - public_subnet: '{{ .grains.vpc_test.outputs.public_subnet }}'
+        - env: '{{.inputs.Environment}}'
       outputs:
         - connection_string
 
@@ -151,5 +152,5 @@ grains:
 
 
 outputs:
-  url:
+  url_please_wait_15_minutes:
     value: 'http://{{ .grains.promotions-manager-ui.outputs.public_dns }}:3000'

@@ -74,7 +74,7 @@ resource "aws_docdb_cluster_instance" "cluster_instances" {
     cluster_identifier = "${aws_docdb_cluster.default.id}"
     instance_class     = "db.t4g.medium"
     tags = {
-        torque-sandbox-id = "${var.SANDBOX_ID}"
+        torque-sandbox-id = var.SANDBOX_ID
     }
 }
 
@@ -84,10 +84,10 @@ resource "aws_docdb_cluster" "default" {
     master_password       = "${var.PASSWORD}"
     db_subnet_group_name  = "${aws_docdb_subnet_group.default.id}"
     skip_final_snapshot = true
-    vpc_security_group_ids = ["${aws_security_group.docdb_sg.id}"]
-    db_cluster_parameter_group_name = "${aws_docdb_cluster_parameter_group.no_tls.id}"
+    vpc_security_group_ids = [aws_security_group.docdb_sg.id]
+    db_cluster_parameter_group_name = aws_docdb_cluster_parameter_group.no_tls.id
     tags = {
-        torque-sandbox-id   = "${var.SANDBOX_ID}"
+        torque-sandbox-id   = var.SANDBOX_ID
     }
 }
 

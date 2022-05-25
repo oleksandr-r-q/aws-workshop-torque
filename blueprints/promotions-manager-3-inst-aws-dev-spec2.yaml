@@ -156,5 +156,5 @@ grains:
 
 
 outputs:
-  url:
+  url_please_wait_6_minutes:
     value: 'http://{{ .grains.promotions-manager-ui.outputs.public_dns }}:3000'
