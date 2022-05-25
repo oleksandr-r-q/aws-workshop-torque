@@ -1,22 +1,6 @@
+########################
 # Get VPC by sandbox id
-# Get app subnets by sandbox id
-# data "aws_subnet" "sandbox_app_subnet_0" {
-#     vpc_id = var.vpc_id
-
-#     filter {
-#         name = "tag:Name"
-#         values = ["app-subnet-0"]
-#     }
-# }
-# data "aws_subnet" "sandbox_app_subnet_1" {
-#     vpc_id = var.vpc_id
-
-#     filter {
-#         name = "tag:Name"
-#         values = ["app-subnet-1"]
-#     }
-# }
-
+########################
 data "aws_vpc" "sandbox_vpc" {
   id = var.vpc_id
 }
@@ -31,7 +15,7 @@ resource "aws_security_group" "docdb_sg" {
     from_port   = 27017
     to_port     = 27017
     protocol    = "tcp"
-    cidr_blocks = ["${data.aws_vpc.sandbox_vpc.cidr_block}"]
+    cidr_blocks = [data.aws_vpc.sandbox_vpc.cidr_block]
   }
 
   egress {
@@ -43,7 +27,7 @@ resource "aws_security_group" "docdb_sg" {
 
   tags = {
     Name = "docdb_allow_sandbox_traffic"
-    torque-sandbox-id = "${var.SANDBOX_ID}"
+    torque-sandbox-id = var.SANDBOX_ID
   }
 }
 
@@ -64,14 +48,14 @@ resource "aws_docdb_subnet_group" "default" {
 
   tags = {
     Name = "torque document db sugnet group"
-    torque-sandbox-id = "${var.SANDBOX_ID}"
+    torque-sandbox-id = var.SANDBOX_ID
   }
 }
 
 resource "aws_docdb_cluster_instance" "cluster_instances" {
     # count              = 1
     identifier         = "torque-sandbox-docdb-${var.SANDBOX_ID}"
-    cluster_identifier = "${aws_docdb_cluster.default.id}"
+    cluster_identifier = aws_docdb_cluster.default.id
     instance_class     = "db.t4g.medium"
     tags = {
         torque-sandbox-id = var.SANDBOX_ID
@@ -80,9 +64,9 @@ resource "aws_docdb_cluster_instance" "cluster_instances" {
 
 resource "aws_docdb_cluster" "default" {
     cluster_identifier    = "torque-sandbox-docdb-cluster-${var.SANDBOX_ID}"
-    master_username       = "${var.USERNAME}"
-    master_password       = "${var.PASSWORD}"
-    db_subnet_group_name  = "${aws_docdb_subnet_group.default.id}"
+    master_username       = var.USERNAME
+    master_password       = var.PASSWORD
+    db_subnet_group_name  = aws_docdb_subnet_group.default.id
     skip_final_snapshot = true
     vpc_security_group_ids = [aws_security_group.docdb_sg.id]
     db_cluster_parameter_group_name = aws_docdb_cluster_parameter_group.no_tls.id
@@ -97,7 +81,7 @@ resource "local_file" "data" {
 }
 
 resource "null_resource" "insert_data" {
-    count = "${var.INSERT_DATA ? 1 : 0}"
+    count = var.INSERT_DATA ? 1 : 0
 
     provisioner "local-exec" {
         command = "chmod 777 insert_data.sh && ./insert_data.sh ${aws_docdb_cluster.default.endpoint} ${var.USERNAME} ${var.PASSWORD} ${var.DB_NAME} ${var.COLLECTION_NAME} ${aws_docdb_cluster_instance.cluster_instances.arn}"
