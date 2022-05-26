@@ -26,7 +26,7 @@ resource "aws_security_group" "docdb_sg" {
   }
 
   tags = {
-    Name = "docdb_allow_sandbox_traffic"
+    Name              = "docdb_allow_sandbox_traffic"
     torque-sandbox-id = var.SANDBOX_ID
   }
 }
@@ -47,48 +47,48 @@ resource "aws_docdb_subnet_group" "default" {
   subnet_ids = [var.public_subnet, var.public_subnet_1]
 
   tags = {
-    Name = "torque document db sugnet group"
+    Name              = "torque document db sugnet group"
     torque-sandbox-id = var.SANDBOX_ID
   }
 }
 
 resource "aws_docdb_cluster_instance" "cluster_instances" {
-    # count              = 1
-    identifier         = "torque-sandbox-docdb-${var.SANDBOX_ID}"
-    cluster_identifier = aws_docdb_cluster.default.id
-    instance_class     = "db.t4g.medium"
-    tags = {
-        torque-sandbox-id = var.SANDBOX_ID
-    }
+  # count              = 1
+  identifier         = "torque-sandbox-docdb-${var.SANDBOX_ID}"
+  cluster_identifier = aws_docdb_cluster.default.id
+  instance_class     = "db.t4g.medium"
+  tags = {
+    torque-sandbox-id = var.SANDBOX_ID
+  }
 }
 
 resource "aws_docdb_cluster" "default" {
-    cluster_identifier    = "torque-sandbox-docdb-cluster-${var.SANDBOX_ID}"
-    master_username       = var.USERNAME
-    master_password       = var.PASSWORD
-    db_subnet_group_name  = aws_docdb_subnet_group.default.id
-    skip_final_snapshot = true
-    vpc_security_group_ids = [aws_security_group.docdb_sg.id]
-    db_cluster_parameter_group_name = aws_docdb_cluster_parameter_group.no_tls.id
-    tags = {
-        torque-sandbox-id   = var.SANDBOX_ID
-    }
+  cluster_identifier              = "torque-sandbox-docdb-cluster-${var.SANDBOX_ID}"
+  master_username                 = var.USERNAME
+  master_password                 = var.PASSWORD
+  db_subnet_group_name            = aws_docdb_subnet_group.default.id
+  skip_final_snapshot             = true
+  vpc_security_group_ids          = [aws_security_group.docdb_sg.id]
+  db_cluster_parameter_group_name = aws_docdb_cluster_parameter_group.no_tls.id
+  tags = {
+    torque-sandbox-id = var.SANDBOX_ID
+  }
 }
 
 resource "local_file" "data" {
-    content     = "[{\"email\":\"admin\",\"password\":\"admin\"}]"
-    filename    = "data.json"
+  content  = "[{\"email\":\"admin\",\"password\":\"admin\"}]"
+  filename = "data.json"
 }
 
 resource "null_resource" "insert_data" {
-    count = var.INSERT_DATA ? 1 : 0
+  count = var.INSERT_DATA ? 1 : 0
 
-    provisioner "local-exec" {
-        command = "chmod 777 insert_data.sh && ./insert_data.sh ${aws_docdb_cluster.default.endpoint} ${var.USERNAME} ${var.PASSWORD} ${var.DB_NAME} ${var.COLLECTION_NAME} ${aws_docdb_cluster_instance.cluster_instances.arn}"
-        interpreter = ["/bin/bash", "-c"]
-    }
+  provisioner "local-exec" {
+    command     = "chmod 777 insert_data.sh && ./insert_data.sh ${aws_docdb_cluster.default.endpoint} ${var.USERNAME} ${var.PASSWORD} ${var.DB_NAME} ${var.COLLECTION_NAME} ${aws_docdb_cluster_instance.cluster_instances.arn}"
+    interpreter = ["/bin/bash", "-c"]
+  }
 }
 
 output "connection_string" {
-    value = "mongodb://${var.USERNAME}:${var.PASSWORD}@${aws_docdb_cluster.default.endpoint}:27017"
+  value = "mongodb://${var.USERNAME}:${var.PASSWORD}@${aws_docdb_cluster.default.endpoint}:27017"
 }

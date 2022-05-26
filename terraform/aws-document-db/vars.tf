@@ -2,24 +2,24 @@ variable "AWS_REGION" {
   type    = string
   default = "us-west-2"
 }
-variable SANDBOX_ID {
+variable "SANDBOX_ID" {
   type    = string
   default = "test"
 }
 variable "USERNAME" {
-    default = "adminuser"
+  default = "adminuser"
 }
 variable "PASSWORD" {
-    default = "Welcome1234567+"
+  default = "Welcome1234567+"
 }
 variable "INSERT_DATA" {
-    default = false
+  default = false
 }
 variable "DB_NAME" {
-    default = "test"
+  default = "test"
 }
 variable "COLLECTION_NAME" {
-    default = "test"
+  default = "test"
 }
 
 variable "vpc_id" {
