@@ -4,7 +4,7 @@ provider "aws" {
     tags = {
       Terraform   = "true"
       Environment = var.env,
-      sandbox_id  = "${var.SANDBOX_ID}"
+      sandbox_id  = var.SANDBOX_ID
     }
   }
 }
