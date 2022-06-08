@@ -1,0 +1,145 @@
+spec_version: 2-preview
+description: All in one deployment of our promotions manager
+
+
+inputs:
+  PORT:
+    type: numeric
+    display-style: normal
+    default: 3000
+  API_PORT:
+    type: numeric
+    display-style: normal
+    default: 3001
+  AWS_INSTANCE_TYPE:
+    type: string
+    display-style: normal
+    default: "t3a.micro"
+  RELEASE_NUMBER:
+    type: string
+    display-style: normal
+    default: none
+  API_BUILD_NUMBER:
+    type: string
+    display-style: normal
+    default: none
+  DB_USERNAME:
+    type: string
+    display-style: normal
+    default: adminuser
+  DB_PASSWORD: 
+    type: string
+    display-style: normal
+    description: please set the master database password
+    default: Welcome1234567+
+  AWS_REGION:
+    type: string
+    display-style: normal
+    default: us-west-2
+  aws_s3_bucket:
+    type: string
+    display-style: normal
+    default: artifact-repo-promotionapp-oleksandr
+  Environment:
+    type: string
+    display-style: normal
+    default: test
+
+grains:
+  vpc_test:
+    kind: terraform
+    spec:
+      source:
+        path: github.com/oleksandr-r-q/aws-workshop-torque/terraform/vpc
+      host:
+        cloud-account: AWS
+        compute-service: eks-torque-demo-oleksandrr1
+      inputs:
+        - SANDBOX_ID: '{{ sandboxid | downcase }}'
+        - API_PORT: '{{.inputs.API_PORT}}'
+        - PORT: '{{.inputs.PORT}}'
+        - AWS_REGION: '{{.inputs.AWS_REGION}}'
+        - env: '{{.inputs.Environment}}'
+      outputs:
+        - public_subnet
+        - private_subnets
+        - aws_security_group_id
+        - instance_profile
+        - vpc_id
+        - public_subnet_1
+
+  docdb:
+    kind: terraform
+    depends-on: vpc_test
+    spec:
+      source:
+        path: github.com/oleksandr-r-q/aws-workshop-torque/terraform/aws-document-db
+      host:
+        cloud-account: AWS
+        compute-service: eks-torque-demo-oleksandrr1
+      inputs:
+        - SANDBOX_ID: '{{ sandboxid | downcase }}'
+        - instance_type: '{{.inputs.AWS_INSTANCE_TYPE}}'
+        - AWS_REGION: '{{.inputs.AWS_REGION}}'
+        - DB_USERNAME: '{{.inputs.DB_USERNAME}}'
+        - DB_PASSWORD: '{{.inputs.DB_PASSWORD}}'
+        - vpc_id: '{{ .grains.vpc_test.outputs.vpc_id }}'
+        - public_subnet_1: '{{ .grains.vpc_test.outputs.public_subnet_1 }}'
+        - public_subnet: '{{ .grains.vpc_test.outputs.public_subnet }}'
+        - env: '{{.inputs.Environment}}'
+      outputs:
+        - connection_string
+
+  promotions-manager-api:
+    kind: terraform
+    depends-on: docdb, vpc_test
+    spec:
+      source:
+        path: github.com/oleksandr-r-q/aws-workshop-torque/terraform/promotions-manager-api
+      host:
+        cloud-account: AWS
+        compute-service: eks-torque-demo-oleksandrr1
+      inputs:
+        - SANDBOX_ID: '{{ sandboxid | downcase }}'
+        - instance_type: '{{.inputs.AWS_INSTANCE_TYPE}}'
+        - AWS_REGION: '{{.inputs.AWS_REGION}}'
+        - instance_profile: '{{ .grains.vpc_test.outputs.instance_profile }}'
+        - public_subnet: '{{ .grains.vpc_test.outputs.public_subnet }}'
+        - aws_security_group_id: '{{ .grains.vpc_test.outputs.aws_security_group_id }}'
+        - env: '{{.inputs.Environment}}'
+        - aws_s3_bucket: '{{.inputs.aws_s3_bucket}}'
+        - API_PORT: '{{.inputs.API_PORT}}'
+        - PORT: '{{.inputs.PORT}}'
+        - RELEASE_NUMBER: '{{.inputs.RELEASE_NUMBER}}'
+        - API_BUILD_NUMBER: '{{.inputs.API_BUILD_NUMBER}}'
+        - DATABASE_HOST: '{{ .grains.docdb.outputs.connection_string }}'
+        - private_ip: '10.0.101.102'
+      outputs:
+        - public_dns
+        - public_ip
+        - private_ip
+        - private_dns
+
+  promotions-manager-ui:
+    kind: helm
+    depends-on: promotions-manager-api
+    spec:
+      source:
+        path: github.com/oleksandr-r-q/aws-workshop-torque/helm/promotions-manager
+      host:
+        cloud-account: AWS
+        compute-service: eks-torque-demo-oleksandrr1
+      inputs:
+        - env.SANDBOX_ID: '{{ sandboxid | downcase }}'
+        - env.API_PORT: '{{.inputs.API_PORT}}'
+        - env.RELEASE_NUMBER: '{{.inputs.RELEASE_NUMBER}}'
+        - env.API_BUILD_NUMBER: '{{.inputs.API_BUILD_NUMBER}}'
+        - env.API_HOST: '{{ .grains.promotions-manager-api.outputs.public_dns }}'
+
+
+outputs:
+  url_please_wait_15_minutes:
+    value: 'http://promotions-manager.testquali.click'
+  # instance_url_please_wait_15_minutes:
+  #   value: 'http://ec2-54-189-145-155.us-west-2.compute.amazonaws.com:30000'
+
