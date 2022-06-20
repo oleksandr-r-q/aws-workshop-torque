@@ -125,7 +125,7 @@ grains:
     depends-on: promotions-manager-api
     spec:
       source:
-        path: github.com/oleksandr-r-q/aws-workshop-torque/helm/promotions-manager
+        path: https://github.com/oleksandr-r-q/aws-workshop-torque.git//helm/promotions-manager
       host:
         cloud-account: AWS
         compute-service: eks-torque-demo-oleksandrr1
