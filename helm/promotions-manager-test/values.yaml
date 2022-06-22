@@ -37,7 +37,8 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: ClusterIP
+  # type: ClusterIP
+  type: NodePort
   port: 80
 
 # ingress:
@@ -64,22 +65,25 @@ env:
 ingress:
   enabled: true
   annotations: # {}
-    kubernetes.io/ingress.class: alb
-    # alb.ingress.kubernetes.io/group.name: public-alb
-    alb.ingress.kubernetes.io/load-balancer-name: public-alb
     alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:us-west-2:102305463663:certificate/43cfced9-a79f-4966-857a-eb0eabadd194'
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}, {"HTTPS":443}]'
-    # alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
-    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS-1-1-2017-01
-    alb.ingress.kubernetes.io/tags: Environment=prod,State=testing
-    alb.ingress.kubernetes.io/success-codes: "200,301,302"
-    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/load-balancer-name: promotions-manager
+  #   kubernetes.io/ingress.class: alb
+  #   # alb.ingress.kubernetes.io/group.name: public-alb
+  #   alb.ingress.kubernetes.io/load-balancer-name: public-alb
+  #   alb.ingress.kubernetes.io/scheme: internet-facing
+  #   alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:us-west-2:102305463663:certificate/43cfced9-a79f-4966-857a-eb0eabadd194'
+  #   alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}, {"HTTPS":443}]'
+  #   # alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+  #   alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS-1-1-2017-01
+  #   alb.ingress.kubernetes.io/tags: Environment=prod,State=testing
+  #   alb.ingress.kubernetes.io/success-codes: "200,301,302"
+  #   alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+  #   alb.ingress.kubernetes.io/target-type: ip
+  #   alb.ingress.kubernetes.io/ssl-redirect: '443'
   path: /
-  hosts:
-  - promotions-manager.testquali.click
+  # hosts:
+  # - promotions-manager.testquali.click
 
 
   # hosts:
