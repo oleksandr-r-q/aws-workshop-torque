@@ -3,9 +3,9 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}
   annotations:
-    service.beta.kubernetes.io/aws-load-balancer-type: alb
     service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: relase=promotions-manager,env=test
     service.beta.kubernetes.io/aws-load-balancer-name: promotions-manager
+    service.beta.kubernetes.io/aws-load-balancer-type: external
   labels:
     app: {{ .Release.Name }}
     {{- include "promotions-manager.labels" . | nindent 4 }}
