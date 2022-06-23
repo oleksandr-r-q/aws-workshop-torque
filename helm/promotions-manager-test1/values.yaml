@@ -38,7 +38,7 @@ securityContext: {}
 
 service:
   # type: ClusterIP
-  type: NodePort
+  type: LoadBalancer
   port: 80
 
 # ingress:
