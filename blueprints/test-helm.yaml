@@ -50,7 +50,7 @@ grains:
     kind: helm
     spec:
       source:
-        path: https://github.com/oleksandr-r-q/aws-workshop-torque.git//helm/promotions-manager-test
+        path: https://github.com/oleksandr-r-q/aws-workshop-torque.git//helm/promotions-manager-test1
       host:
         cloud-account: AWS
         compute-service: eks-torque-demo-oleksandrr1

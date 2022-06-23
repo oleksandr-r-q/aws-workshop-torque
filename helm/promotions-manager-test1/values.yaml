@@ -116,13 +116,3 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
-aws-load-balancer-controller:
-  region: us-west-2
-  vpcId: vpc-05a5c9954a893186c
-  clusterName: eks-torque-demo-oleksandrr
-  serviceAccount:
-    name: aws-alb-controller
-    annotations:
-      eks.amazonaws.com/role-arn: "arn:aws:iam::102305463663:role/eks-torque-demo-oleksandrr_alb_ingress_controller"
-  logLevel: info
