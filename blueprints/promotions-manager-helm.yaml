@@ -1,0 +1,46 @@
+spec_version: 2-preview
+description: All in one deployment of our promotions manager
+
+
+inputs:
+  PORT:
+    type: numeric
+    display-style: normal
+    default: 3000
+  API_PORT:
+    type: numeric
+    display-style: normal
+    default: 3001
+  RELEASE_NUMBER:
+    type: string
+    display-style: normal
+    default: none
+  API_BUILD_NUMBER:
+    type: string
+    display-style: normal
+    default: none
+
+grains:
+  promotions-manager-ui:
+    kind: helm
+    depends-on:
+    spec:
+      source:
+        path: https://github.com/oleksandr-r-q/aws-workshop-torque.git//helm/promotions-manager-test1
+      host:
+        cloud-account: AWS
+        compute-service: eks-torque-demo-oleksandrr1
+      inputs:
+        - env.SANDBOX_ID: '{{ sandboxid | downcase }}'
+        - env.API_PORT: '{{.inputs.API_PORT}}'
+        - env.RELEASE_NUMBER: '{{.inputs.RELEASE_NUMBER}}'
+        - env.API_BUILD_NUMBER: '{{.inputs.API_BUILD_NUMBER}}'
+        - env.API_HOST: localhost
+
+
+outputs:
+  # url_please_wait_5_minutes:
+  #   value: 'http://{{ .grains.alb-data.outputs.lb_dns }}'
+  # instance_url_please_wait_15_minutes:
+  #   value: 'http://ec2-54-189-145-155.us-west-2.compute.amazonaws.com:30000'
+
