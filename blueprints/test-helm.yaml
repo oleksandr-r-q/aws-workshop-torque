@@ -94,7 +94,7 @@ grains:
         - aws-load-balancer-controller.region: '{{.inputs.AWS_REGION}}'
         - aws-load-balancer-controller.clusterName: '{{.inputs.Cluster_Name}}'
 
-  lb-data:
+  alb-data:
     kind: terraform
     depends-on: promotions-manager-ui
     spec:
@@ -109,12 +109,12 @@ grains:
         - env: '{{.inputs.Environment}}'
         - cluster_name: '{{.inputs.Cluster_Name}}'
       outputs:
-        - role_arn
+        - lb_dns
 
 
 outputs:
-  url_please_wait_15_minutes:
-    value: 'http://promotions-manager.testquali.click'
+  url_please_wait_5_minutes:
+    value: 'http://{{ .grains.alb-data.outputs.lb_dns }}'
   # instance_url_please_wait_15_minutes:
   #   value: 'http://ec2-54-189-145-155.us-west-2.compute.amazonaws.com:30000'
 
