@@ -44,10 +44,39 @@ inputs:
     type: string
     display-style: normal
     default: test
+  Cluster_Name:
+    type: string
+    display-style: normal
+    default: eks-torque-demo-oleksandrr
+  Cluster_VPC_ID:
+    type: string
+    display-style: normal
+    default: vpc-05a5c9954a893186c
+  oidc_provider_arn:
+    type: string
+    display-style: normal
+    default: "arn:aws:iam::102305463663:oidc-provider/oidc.eks.us-west-2.amazonaws.com/id/3F933DD270F72FD8793701D9130911E7"
 
 grains:
+  alb-iam:
+    kind: terraform
+    spec:
+      source:
+        path: github.com/oleksandr-r-q/aws-workshop-torque/terraform/alb-iam
+      host:
+        cloud-account: AWS
+        compute-service: eks-torque-demo-oleksandrr1
+      inputs:
+        - SANDBOX_ID: '{{ sandboxid | downcase }}'
+        - AWS_REGION: '{{.inputs.AWS_REGION}}'
+        - env: '{{.inputs.Environment}}'
+        - oidc_provider_arn: '{{.inputs.oidc_provider_arn}}'
+      outputs:
+        - role_arn
+
   promotions-manager-ui:
     kind: helm
+    depends-on: alb-iam
     spec:
       source:
         path: https://github.com/oleksandr-r-q/aws-workshop-torque.git//helm/promotions-manager-test
@@ -60,6 +89,27 @@ grains:
         - env.RELEASE_NUMBER: '{{.inputs.RELEASE_NUMBER}}'
         - env.API_BUILD_NUMBER: '{{.inputs.API_BUILD_NUMBER}}'
         - env.API_HOST: localhost
+        - aws-load-balancer-controller.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn: '{{ .grains.alb-iam.outputs.role_arn }}'
+        - aws-load-balancer-controller.vpcId: '{{.inputs.Cluster_VPC_ID}}'
+        - aws-load-balancer-controller.region: '{{.inputs.AWS_REGION}}'
+        - aws-load-balancer-controller.clusterName: '{{.inputs.Cluster_Name}}'
+
+  lb-data:
+    kind: terraform
+    depends-on: promotions-manager-ui
+    spec:
+      source:
+        path: github.com/oleksandr-r-q/aws-workshop-torque/terraform/lb-data
+      host:
+        cloud-account: AWS
+        compute-service: eks-torque-demo-oleksandrr1
+      inputs:
+        - SANDBOX_ID: '{{ sandboxid | downcase }}'
+        - AWS_REGION: '{{.inputs.AWS_REGION}}'
+        - env: '{{.inputs.Environment}}'
+        - cluster_name: '{{.inputs.Cluster_Name}}'
+      outputs:
+        - role_arn
 
 
 outputs:
